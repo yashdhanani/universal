@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+.pytest_cache/
+
+# Virtualenv
+venv/
+
+# Local data
+logs/
+downloads/
+.env
+*.env
+
+# Reports
+auto_check_report.json
+
+# OS
+.DS_Store
+Thumbs.db

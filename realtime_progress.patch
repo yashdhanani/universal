@@ -1,0 +1,63 @@
+*** Begin Patch
+*** Update File: app.py
+@@
+-import yt_dlp
+-from flask import Flask, request, jsonify, send_file, send_from_directory, render_template, redirect, url_for, flash, abort
++import yt_dlp
++from flask import Flask, request, jsonify, send_file, send_from_directory, render_template, redirect, url_for, flash, abort, Response, stream_with_context
+ from werkzeug.exceptions import NotFound
+ import threading 
+ import uuid
+ from datetime import datetime
+ import time
+@@
+ @app.route('/api/progress/<task_id>')
+ def api_progress(task_id):
+     task = tasks.get(task_id, {})
+     return jsonify(task)
+ 
++@app.route('/api/progress-stream/<task_id>')
++def api_progress_stream(task_id):
++    """Server-Sent Events stream for real-time progress updates"""
++    def event_stream():
++        last_sent = None
++        try:
++            # Send updates until terminal state or client disconnect
++            while True:
++                task = tasks.get(task_id, {})
++                payload = {
++                    'status': task.get('status'),
++                    'progress': task.get('progress'),
++                    'eta_seconds': task.get('eta_seconds'),
++                    'filename': task.get('filename'),
++                    'error': task.get('error')
++                }
++                data = json.dumps(payload, ensure_ascii=False)
++                if data != last_sent:
++                    # SSE message
++                    yield f"data: {data}\n\n"
++                    last_sent = data
++                # Stop after terminal states
++                if payload.get('status') in ('finished', 'error'):
++                    break
++                time.sleep(0.5)
++        except GeneratorExit:
++            # Client disconnected; silently stop streaming
++            pass
++        except Exception as e:
++            # Non-fatal: log and end stream
++            try:
++                logger.debug(f"SSE stream error for task {task_id}: {e}")
++            except Exception:
++                pass
++    headers = {
++        'Cache-Control': 'no-cache',
++        'X-Accel-Buffering': 'no'  # Disable buffering on some proxies
++    }
++    return Response(stream_with_context(event_stream()), mimetype='text/event-stream', headers=headers)
++
+ @app.route('/')
+ def home():
+     # Redirect root to the universal downloader
+     return redirect(url_for('universal'))
+*** End Patch

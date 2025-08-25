@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <title>YouTube Downloader - Fast & Easy Video Downloads</title>
+    <meta name="description" content="Download YouTube videos in high quality. Fast, free, and works on all devices - mobile, tablet, and desktop.">
+    <meta name="theme-color" content="#667eea">
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="YT Downloader">
+    
+    <!-- Favicon & Manifest -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📥</text></svg>">
+    <link rel="manifest" href="/static/manifest.json">
+</head>
+<body>
+    <div class="container">
+        <div class="header-nav">
+            <h1>📥 YouTube Downloader</h1>
+            <a href="/universal" class="nav-link">🌐 Universal Downloader</a>
+        </div>
+        <div id="messages"></div>
+        <div class="form-container">
+            <div class="input-group">
+                <input type="text" id="youtube-url" placeholder="Paste YouTube URL here..." required autocomplete="off" spellcheck="false">
+                <button id="paste-btn" type="button" class="paste-btn" title="Paste from clipboard">
+                    <span class="btn-icon">📋</span>
+                </button>
+            </div>
+            <button id="get-info-btn" type="button">
+                <span class="btn-text">Download</span>
+                <span class="btn-icon">🚀</span>
+            </button>
+        </div>
+        
+        <div id="video-info" class="section hidden">
+            <img id="video-thumbnail" src="" alt="Video Thumbnail" class="video-thumbnail">
+            <h2 id="video-title" class="video-title"></h2>
+            
+            <div class="video-details">
+                <div class="video-detail-item">
+                    <span class="video-detail-label">⏱️ Duration</span>
+                    <span class="video-detail-value" id="video-duration">-</span>
+                </div>
+                <div class="video-detail-item">
+                    <span class="video-detail-label">👁️ Views</span>
+                    <span class="video-detail-value" id="video-views">-</span>
+                </div>
+                <div class="video-detail-item">
+                    <span class="video-detail-label">📅 Upload Date</span>
+                    <span class="video-detail-value" id="video-upload-date">-</span>
+                </div>
+                <div class="video-detail-item">
+                    <span class="video-detail-label">📺 Channel</span>
+                    <span class="video-detail-value" id="video-channel">-</span>
+                </div>
+            </div>
+            
+            <div class="format-selection">
+                <h3>🎯 Choose Quality & Format</h3>
+                <!-- Quick actions -->
+                <div class="quick-actions" style="margin:10px 0 16px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <button id="best-btn" type="button">Best (Video+Audio)</button>
+                    <button id="highest-btn" type="button" title="Pick the highest available video+audio">Highest quality (Video+Audio)</button>
+                    <button class="preset-btn" data-height="2160" data-fps="60" type="button">2160p60</button>
+                    <button class="preset-btn" data-height="1440" data-fps="60" type="button">1440p60</button>
+                    <button class="preset-btn" data-height="1080" data-fps="60" type="button">1080p60</button>
+                    <button class="preset-btn" data-height="720" data-fps="60" type="button">720p60</button>
+                    <button class="preset-btn" data-height="480" type="button">480p</button>
+                    <button class="preset-btn" data-height="360" type="button">360p</button>
+                    <button class="preset-btn" data-height="240" type="button">240p</button>
+                    <button class="preset-btn" data-height="144" type="button">144p</button>
+                </div>
+                <div class="format-grid" id="format-grid">
+                    <!-- Format options will be populated here -->
+                </div>
+                <button id="download-btn" class="hidden" type="button">
+                    <span class="btn-text">Start Download</span>
+                    <span class="btn-icon">⬇️</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="fetch-progress-container" class="progress-container hidden">
+            <h3>🔍 Analyzing Video...</h3>
+            <div class="progress-bar">
+                <div class="progress" id="fetch-progress"></div>
+            </div>
+            <p id="fetch-progress-text">Please wait while we fetch video details...</p>
+            <p id="fetch-eta" style="margin-top:8px;color:#666">⏱️ Estimated time: ~12s</p>
+        </div>
+
+        <div id="progress-container" class="progress-container hidden">
+            <div class="progress-header" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:10px">
+                    <h3 style="margin:0">📥 Download</h3>
+                    <span id="status-badge" class="status-badge status-downloading" aria-live="polite">Downloading</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <span id="retry-msg" class="retry-msg hidden" role="status" aria-live="polite">Something went wrong. You can retry now.</span>
+                    <button id="retry-btn" type="button" class="retry-btn hidden" title="Retry the last download">↻ Retry</button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p id="progress-text">Preparing download...</p>
+            <p id="download-eta" class="progress-eta">⏱️ Estimated time: 1–5 minutes for long videos</p>
+            <div class="progress-tips">
+                💡 <strong>Tip:</strong> Keep this tab open for the download to continue smoothly
+            </div>
+        </div>
+
+        <div id="download-link-container" class="section hidden">
+            <h3>🎉 Download Ready!</h3>
+            <p style="margin: 15px 0; color: #666;">Your video has been processed successfully</p>
+            <a id="download-link" href="" download>
+                <span class="btn-text">Download Video</span>
+                <span class="btn-icon">📱</span>
+            </a>
+        </div>
+
+        <button id="clear-downloads-btn" type="button" style="margin-top: 30px; opacity: 0.7; font-size: 0.9rem;">
+            🗑️ Clear All Downloads
+        </button>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('youtube-url');
+        const getInfoBtn = document.getElementById('get-info-btn');
+        const pasteBtn = document.getElementById('paste-btn');
+        const videoInfoDiv = document.getElementById('video-info');
+        const videoTitle = document.getElementById('video-title');
+        const videoThumbnail = document.getElementById('video-thumbnail');
+        const videoDuration = document.getElementById('video-duration');
+        const videoViews = document.getElementById('video-views');
+        const videoUploadDate = document.getElementById('video-upload-date');
+        const videoChannel = document.getElementById('video-channel');
+        const downloadBtn = document.getElementById('download-btn');
+        const bestBtn = document.getElementById('best-btn');
+        const highestBtn = document.getElementById('highest-btn');
+        const presetButtons = () => Array.from(document.querySelectorAll('.preset-btn'));
+        const formatGrid = document.getElementById('format-grid');
+        const fetchProgressContainer = document.getElementById('fetch-progress-container');
+        const fetchProgress = document.getElementById('fetch-progress');
+        const fetchProgressText = document.getElementById('fetch-progress-text');
+        const progressContainer = document.getElementById('progress-container');
+        const progress = document.getElementById('progress');
+        const progressText = document.getElementById('progress-text');
+        const statusBadge = document.getElementById('status-badge');
+        const downloadLinkContainer = document.getElementById('download-link-container');
+        const downloadLink = document.getElementById('download-link');
+        const messagesDiv = document.getElementById('messages');
+        const clearDownloadsBtn = document.getElementById('clear-downloads-btn');
+
+        // Helper to update status badge + progress color
+        function setStatus(state, label) {
+            if (!statusBadge) return;
+            statusBadge.textContent = label;
+            statusBadge.classList.remove('status-downloading', 'status-merging', 'status-completed', 'status-failed');
+            progress.classList.remove('is-downloading', 'is-merging', 'is-completed', 'is-failed');
+            switch (state) {
+                case 'downloading':
+                    statusBadge.classList.add('status-downloading');
+                    progress.classList.add('is-downloading');
+                    break;
+                case 'merging':
+                    statusBadge.classList.add('status-merging');
+                    progress.classList.add('is-merging');
+                    break;
+                case 'completed':
+                    statusBadge.classList.add('status-completed');
+                    progress.classList.add('is-completed');
+                    break;
+                case 'failed':
+                    statusBadge.classList.add('status-failed');
+                    progress.classList.add('is-failed');
+                    break;
+            }
+        }
+
+        console.log('Frontend script loaded.');
+
+        let currentUrl = '';
+        let formats = [];
+        let selectedFormatId = null;
+        let lastDownloadFormatId = null;
+
+        function showMessage(message, type = 'info') {
+            console.log(`Showing message: "${message}" (type: ${type})`);
+            messagesDiv.innerHTML = `<div class="message ${type}">${message}</div>`;
+        }
+
+        // Helper: format file size for display
+        function formatFileSize(sizeInMB) {
+            if (!sizeInMB) return '';
+            if (sizeInMB < 1) return `${Math.round(sizeInMB * 1024)}KB`;
+            if (sizeInMB < 1024) return `${sizeInMB}MB`;
+            return `${(sizeInMB / 1024).toFixed(1)}GB`;
+        }
+
+        function createFormatCard(format, isSelected = false) {
+            const card = document.createElement('div');
+            card.className = `format-option ${isSelected ? 'selected' : ''}`;
+            card.dataset.formatId = format.format_id;
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            
+            const quality = format.resolution || format.quality || 'Unknown';
+            const extension = format.ext || 'mp4';
+            const codec = (format.vcodec && format.vcodec !== 'none') ? format.vcodec : (format.acodec || '');
+            // Simplify codec display and hide raw strings (e.g., vp09.00.50.08)
+            const prettyCodec = codec ? (
+                codec.startsWith('vp09') ? 'VP9' :
+                codec.startsWith('av01') ? 'AV1' :
+                codec.startsWith('avc1') ? 'H.264' :
+                codec.startsWith('mp4a') ? 'AAC' :
+                codec === 'opus' ? 'Opus' : ''
+            ) : '';
+            const fileSize = format.filesize_mb ? formatFileSize(format.filesize_mb) : '';
+            
+            // Audio-only detection (still selectable)
+            const isAudioOnly = (format.resolution === 'audio only') || (format.acodec && format.acodec !== 'none' && (!format.vcodec || format.vcodec === 'none'));
+            if (isAudioOnly) {
+                // Keep audio-only visible to allow audio downloads
+            }
+            
+            // Determine format type and icon
+            let typeIcon = '🎥';
+            let typeText = 'Video';
+            if (format.resolution === 'audio only' || (format.acodec && format.acodec !== 'none' && (!format.vcodec || format.vcodec === 'none'))) {
+                typeIcon = '🎵';
+                typeText = 'Audio';
+            }
+            
+            card.innerHTML = `
+                <div class="format-quality">${typeIcon} ${quality}</div>
+                <div class="format-details">
+                    <span class="format-tag">${extension.toUpperCase()}</span>
+                    ${prettyCodec ? `<span class="format-tag">${prettyCodec}</span>` : ''}
+                    <span class="format-tag">${typeText}</span>
+                    ${format.fps ? `<span class="format-tag">${format.fps}fps</span>` : ''}
+                </div>
+                <div class="format-size">📦 Size: ${fileSize ? `~${fileSize}` : 'unknown'}</div>
+            `;
+            
+            // Enable selecting audio-only formats too
+            const isAudioOnly = (format.resolution === 'audio only') || (format.acodec && format.acodec !== 'none' && (!format.vcodec || format.vcodec === 'none'));
+            card.addEventListener('click', () => selectFormat(format.format_id, card)); 
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); // Prevent space from scrolling the page
+                    selectFormat(format.format_id, card);
+                }
+            });
+            if (isAudioOnly) {
+                card.title = 'Audio only';
+            }
+            
+            return card;
+        }
+
+        function selectFormat(formatId, cardElement) {
+            // Remove selection from all cards
+            document.querySelectorAll('.format-option').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select the clicked card
+            cardElement.classList.add('selected');
+            selectedFormatId = formatId;
+            
+            // Show download button
+            downloadBtn.classList.remove('hidden');
+            
+            console.log(`Selected format: ${formatId}`);
+        }
+
+        function simulateFetchProgress() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5; // Random increment between 5-20%
+                if (progress >= 95) {
+                    progress = 95; // Stop at 95% until actual fetch completes
+                    clearInterval(interval);
+                }
+                
+                fetchProgress.style.width = `${progress.toFixed(1)}%`;
+                fetchProgressText.textContent = `Analyzing video... ${progress.toFixed(1)}%`;
+                // Update ETA roughly: assume ~12s total
+                const fetchEta = document.getElementById('fetch-eta');
+                if (fetchEta) {
+                    const remaining = Math.max(0, 12 - (progress / 100) * 12);
+                    fetchEta.textContent = `⏱️ Estimated time: ~${Math.ceil(remaining)}s`;
+                }
+            }, 200); // Update every 200ms
+            
+            return interval;
+        }
+
+        getInfoBtn.addEventListener('click', async () => {
+            console.log('Download button clicked.');
+            const url = urlInput.value.trim();
+            if (!url) {
+                showMessage('Please enter a YouTube URL.', 'error');
+                return;
+            }
+            
+            // Add loading state to button
+            getInfoBtn.classList.add('btn-loading');
+            getInfoBtn.disabled = true;
+            
+            hideAllSections();
+            currentUrl = url;
+            console.log(`Fetching info for URL: ${url}`);
+            
+            // Show fetch progress
+            fetchProgressContainer.classList.remove('hidden');
+            fetchProgress.style.width = '0%';
+            fetchProgressText.textContent = 'Starting analysis...';
+            
+            // Start simulated progress
+            const progressInterval = simulateFetchProgress();
+            // Reset ETA text
+            const fetchEta = document.getElementById('fetch-eta');
+            if (fetchEta) fetchEta.textContent = '⏱️ Estimated time: ~12s';
+
+            try {
+                const response = await fetch('/api/video_info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                let data;
+                try {
+                    const contentType = response.headers.get('content-type') || '';
+                    if (contentType.includes('application/json')) {
+                        data = await response.json();
+                    } else {
+                        const text = await response.text();
+                        data = { error: text?.slice(0, 300) || 'Non-JSON response from server.' };
+                    }
+                } catch (parseErr) {
+                    console.error('Failed to parse response as JSON:', parseErr);
+                    data = { error: 'Failed to parse server response.' };
+                }
+                
+                // Complete the progress
+                clearInterval(progressInterval);
+                fetchProgress.style.width = '100%';
+                fetchProgressText.textContent = 'Analysis complete! 100%';
+                console.log('Received response for video info (status ' + response.status + '):', data);
+                if (response.ok) {
+                    console.log('Video info fetched successfully.');
+                    
+                    // Display video details
+                    videoTitle.textContent = data.title;
+                    videoThumbnail.src = data.thumbnail;
+                    videoDuration.textContent = data.duration || 'N/A';
+                    videoViews.textContent = data.view_count ? data.view_count.toLocaleString() : 'N/A';
+                    videoUploadDate.textContent = data.upload_date || 'N/A';
+                    videoChannel.textContent = data.uploader || 'N/A';
+                    
+                    // Populate format options
+                    formats = data.formats;
+                    formatGrid.innerHTML = '';
+                    
+                    // Build direct URL map for progressive formats (instant browser downloads)
+                    const directUrlByFormat = {};
+                    (formats || []).forEach(f => {
+                        if (f && f.is_progressive && f.direct_url) {
+                            directUrlByFormat[f.format_id] = f.direct_url;
+                        }
+                    });
+                    window.__directUrlByFormat = directUrlByFormat;
+
+                    console.log('All available formats:', formats);
+                    
+
+                    
+                    // Add "Best Quality (MP4 preferred)" option first
+                    const bestCard = createFormatCard({
+                        format_id: 'best',
+                        quality: '🏆 Best Quality (MP4 preferred)',
+                        ext: 'mp4',
+                        resolution: 'Auto-Select',
+                        filesize_mb: null
+                    }, true);
+                    formatGrid.appendChild(bestCard);
+                    
+                    // Separate video and audio formats
+                    const videoFormats = [];
+                    const audioFormats = [];
+                    
+                    formats.forEach(format => {
+                        const hasVideo = format.vcodec && format.vcodec !== 'none';
+                        const isAudioOnly = format.resolution === 'audio only' || 
+                                          (format.acodec && format.acodec !== 'none' && 
+                                           (!format.vcodec || format.vcodec === 'none'));
+                        
+                        if (isAudioOnly) {
+                            audioFormats.push(format);
+                        } else if (hasVideo || format.height) {
+                            videoFormats.push(format);
+                        }
+                    });
+                    
+                    // Prefer MP4/H.264 first in the visual list while keeping all formats
+                    const mp4First = (arr) => {
+                        // Rank: MP4 > others; within MP4 prefer H.264 (avc1) and higher height
+                        return arr.slice().sort((a, b) => {
+                            const aMp4 = (a.ext || '').toLowerCase() === 'mp4';
+                            const bMp4 = (b.ext || '').toLowerCase() === 'mp4';
+                            if (aMp4 !== bMp4) return bMp4 - aMp4;
+                            const aH264 = (a.vcodec || '').startsWith('avc1');
+                            const bH264 = (b.vcodec || '').startsWith('avc1');
+                            if (aH264 !== bH264) return bH264 - aH264;
+                            return (b.height || 0) - (a.height || 0);
+                        });
+                    };
+
+                    const videoSorted = mp4First(videoFormats);
+                    const audioSorted = audioFormats.slice().sort((a, b) => (b.tbr || 0) - (a.tbr || 0));
+                    
+                    console.log('Video formats (MP4 preferred):', videoSorted);
+                    console.log('Audio formats:', audioSorted);
+                    
+                    // Add video format cards
+                    videoSorted.forEach(format => {
+                        const card = createFormatCard(format);
+                        formatGrid.appendChild(card);
+                    });
+                    
+                    // Add audio-only cards under a separator
+                    if (audioSorted.length) {
+                        const sep = document.createElement('div');
+                        sep.style.gridColumn = '1 / -1';
+                        sep.style.margin = '10px 0 0';
+                        sep.innerHTML = '<h4 style="margin:8px 0">🎵 Audio Only</h4>';
+                        formatGrid.appendChild(sep);
+                        audioSorted.forEach(format => {
+                            const card = createFormatCard(format);
+                            formatGrid.appendChild(card);
+                        });
+                    }
+                    
+                    // Pre-select the best quality option
+                    selectedFormatId = 'best';
+                    
+                    fetchProgressContainer.classList.add('hidden');
+                    videoInfoDiv.classList.remove('hidden');
+                    resetButtonState();
+                } else {
+                    console.error('Failed to get video info:', data.error);
+                    clearInterval(progressInterval);
+                    fetchProgressContainer.classList.add('hidden');
+                    resetButtonState();
+                    const hint = (response.status === 403) ? ' If this is YouTube anti-bot, add cookies.txt and retry.' : '';
+                    showMessage((data.error || 'Failed to get video info.') + hint, 'error');
+                }
+            } catch (error) {
+                console.error('An error occurred while fetching video info:', error);
+                clearInterval(progressInterval);
+                fetchProgressContainer.classList.add('hidden');
+                resetButtonState();
+                showMessage('An error occurred while fetching video details.', 'error');
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (selectedFormatId) {
+                startDownload(selectedFormatId);
+            } else {
+                showMessage('Please select a format first.', 'error');
+            }
+        });
+
+        // Quick action: Best (video+audio)
+        bestBtn.addEventListener('click', () => {
+            if (!currentUrl) {
+                const url = urlInput.value.trim();
+                if (!url) {
+                    showMessage('Please enter a YouTube URL.', 'error');
+                    return;
+                }
+                currentUrl = url;
+            }
+            startDownload('best');
+        });
+
+        // Quick action: Highest quality (video+audio)
+        highestBtn.addEventListener('click', () => {
+            if (!currentUrl) {
+                const url = urlInput.value.trim();
+                if (!url) {
+                    showMessage('Please enter a YouTube URL.', 'error');
+                    return;
+                }
+                currentUrl = url;
+            }
+            // Use an explicit selector that asks for highest quality with merge
+            // Backend accepts selector strings and merges audio automatically when video-only
+            startDownload('bestvideo[height<=4320]+bestaudio/best');
+        });
+
+        // Preset quality buttons (video+audio)
+        function ensureUrl() {
+            if (currentUrl) return true;
+            const url = urlInput.value.trim();
+            if (!url) {
+                showMessage('Please enter a YouTube URL.', 'error');
+                return false;
+            }
+            currentUrl = url;
+            return true;
+        }
+        function pickFormatIdForPreset(height, fps) {
+            // Prefer matching vcodec stream; backend will merge bestaudio if video-only
+            // We use the analyzed formats if available; otherwise, ask backend with a selector
+            if (!Array.isArray(formats) || formats.length === 0) return null;
+            // Find closest match by height and fps (if fps specified)
+            let candidates = formats.filter(f => (f.resolution && f.resolution.includes('x')));
+            candidates = candidates.filter(f => {
+                const h = f.height || (f.resolution?.split('x')[1] * 1) || 0;
+                const okH = h === height;
+                const okFps = (typeof fps === 'number') ? (Number(f.fps || 0) >= fps) : true;
+                return okH && okFps;
+            });
+            // Prefer MP4/H.264 when available for better compatibility
+            candidates.sort((a,b)=>{
+                const preferMp4 = (x)=> (x.ext||'')==='mp4' || (x.vcodec||'').startsWith('avc1');
+                if (preferMp4(a) && !preferMp4(b)) return -1;
+                if (!preferMp4(a) && preferMp4(b)) return 1;
+                return (Number(b.fps||0) - Number(a.fps||0));
+            });
+            if (candidates.length>0) return candidates[0].format_id;
+            return null;
+        }
+        function startPreset(height, fps) {
+            if (!ensureUrl()) return;
+            // If we have a concrete format_id from analyze, use it; else send a selector string
+            const chosen = pickFormatIdForPreset(height, fps);
+            if (chosen) {
+                startDownload(chosen);
+                return;
+            }
+            // Fallback: tell backend to choose via selector (yt-dlp will merge +bestaudio)
+            const fpsFilter = (typeof fps === 'number') ? `[fps>=${fps}]` : '';
+            const selector = `bestvideo[height=${height}]${fpsFilter}+bestaudio/best[height=${height}]${fpsFilter}`;
+            startDownload(selector);
+        }
+        presetButtons().forEach(btn => {
+            btn.addEventListener('click', () => {
+                const height = Number(btn.dataset.height);
+                const fps = btn.dataset.fps ? Number(btn.dataset.fps) : undefined;
+                startPreset(height, fps);
+            });
+        });
+
+        async function startDownload(formatId) {
+            // Track the last requested format for retry
+            lastDownloadFormatId = formatId;
+            // Hide Retry button when starting a new attempt
+            const retryBtn = document.getElementById('retry-btn');
+            if (retryBtn) retryBtn.classList.add('hidden');
+            const retryMsg = document.getElementById('retry-msg');
+            if (retryMsg) retryMsg.classList.add('hidden');
+            console.log(`Starting download with format: ${formatId}`);
+            hideAllSections();
+            progressContainer.classList.remove('hidden');
+            progress.style.width = '0%';
+            setStatus('downloading', 'Downloading');
+            progressText.textContent = 'Starting download...';
+
+            // Try instant browser download if a direct progressive URL exists
+            try {
+                const directMap = window.__directUrlByFormat || {};
+                const directUrl = directMap[formatId];
+                if (directUrl) {
+                    try {
+                        const a = document.createElement('a');
+                        a.href = directUrl;
+                        a.download = '';
+                        a.rel = 'noopener';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        // Show a ready link as well
+                        downloadLink.href = directUrl;
+                        downloadLink.setAttribute('download', '');
+                        downloadLinkContainer.classList.remove('hidden');
+                        progressContainer.classList.add('hidden');
+                        return;
+                    } catch (e) {
+                        console.warn('Direct download failed, falling back to backend task.', e);
+                    }
+                }
+                // Fallback to backend download task
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: currentUrl, format_id: formatId })
+                });
+                const data = await response.json();
+                console.log('Received response for download start:', data);
+                if (response.ok) {
+                    console.log(`Download started with task ID: ${data.task_id}`);
+                    pollProgress(data.task_id);
+                } else {
+                    console.error('Failed to start download:', data.error);
+                    showMessage(data.error || 'Failed to start download.', 'error');
+                    progressContainer.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('An error occurred while starting download:', error);
+                showMessage('An error occurred.', 'error');
+                progressContainer.classList.add('hidden');
+            }
+        }
+
+        function pollProgress(taskId) {
+            let lastText = '';
+            let smooth = 0; // keeps a smoothed percentage for smoother UI
+            console.log(`Polling for progress of task ID: ${taskId}`);
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/progress/${taskId}`);
+                    const data = await response.json();
+                    console.log('Polling response:', data);
+                    if (response.ok) {
+                        if (data.status === 'initializing') {
+                            // Show connection status with pulsing animation
+                            setStatus('downloading', 'Connecting');
+                            progressText.textContent = data.progress;
+                            progress.style.width = '5%'; // Small progress to show activity
+                            progress.classList.add('progress-initializing');
+                            progress.classList.add('progress-fast');
+                        } else if (data.status === 'preparing') {
+                            // Show preparing status with actual percentage
+                            setStatus('downloading', 'Preparing');
+                            progressText.textContent = data.progress;
+                            
+                            // Extract percentage from preparing progress text
+                            const preparingMatch = data.progress.match(/(\d+\.?\d*)%/);
+                            if (preparingMatch) {
+                                const preparingPercent = parseFloat(preparingMatch[1]);
+                                progress.style.width = `${preparingPercent}%`;
+                            } else {
+                                progress.style.width = '10%'; // Fallback
+                            }
+                            
+                            // Use preparing-specific animation
+                            progress.classList.remove('progress-initializing');
+                            progress.classList.add('progress-preparing');
+                            progress.classList.add('progress-fast');
+                        } else if (data.status === 'downloading' || data.status === 'processing') {
+                            if (data.status === 'processing') {
+                                setStatus('merging', 'Merging');
+                                progressText.textContent = data.progress;
+                                progress.style.width = '100%'; // Show full bar during processing
+                            } else {
+                                // Remove initialization and preparing animations when actual download starts
+                                progress.classList.remove('progress-initializing');
+                                progress.classList.remove('progress-preparing');
+                                progress.classList.remove('progress-fast');
+                                
+                                // Parse percentage from progress text and ensure it's valid
+                                const progressValue = data.progress || '0%';
+                                const numericProgress = parseFloat(progressValue.replace('%', ''));
+                                // Clamp and smooth
+                                const clamped = Math.min(Math.max(isNaN(numericProgress) ? 0 : numericProgress, 0), 100);
+                                smooth = Math.max(smooth, clamped - 0.5);
+                                const formatted = `${smooth.toFixed(1)}%`;
+                                progress.style.width = formatted;
+                                // Prefer backend text if it includes speed/ETA
+                                const text = (data.progress && (data.progress.includes('MB/s') || data.progress.includes('left'))) ? data.progress : `Downloading... ${formatted}`;
+                                setStatus('downloading', 'Downloading');
+                                progressText.textContent = text;
+                                // Update a simple ETA assuming linear progress of 6 min max
+                                const etaEl = document.getElementById('download-eta');
+                                if (etaEl) {
+                                    const totalSec = 360; // 6 minutes worst-case
+                                    const remaining = Math.max(5, Math.ceil((1 - (clamped/100)) * totalSec));
+                                    const m = Math.floor(remaining/60), s = remaining%60;
+                                    etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
+                                }
+                                console.log(`Progress updated: ${formatted} (raw: ${progressValue})`);
+                            }
+                        } else if (data.status === 'finished') {
+                            console.log('Download finished.');
+                            setStatus('completed', 'Completed');
+                            clearInterval(interval);
+                            progressContainer.classList.add('hidden');
+                            const encoded = encodeURIComponent(data.filename);
+                            const href = `/download/${encoded}`;
+                            downloadLink.href = href;
+                            downloadLink.setAttribute('download', data.filename);
+                            downloadLinkContainer.classList.remove('hidden');
+                            // Auto-start browser download
+                            try {
+                                const a = document.createElement('a');
+                                a.href = href;
+                                a.download = data.filename; // preserve original name for save dialog
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                            } catch (e) {
+                                console.warn('Auto-download failed, showing link instead.');
+                            }
+                            // Reset ETA display after finish
+                            const etaEl = document.getElementById('download-eta');
+                            if (etaEl) etaEl.textContent = '⏱️ Estimated time: done';
+                        } else if (data.status === 'error') {
+                            console.error('Download error from server:', data.error);
+                            setStatus('failed', 'Failed');
+                            clearInterval(interval);
+                            showMessage(data.error || 'An error occurred during download.', 'error');
+                            // Show Retry button and inline message
+                            const retryBtn = document.getElementById('retry-btn');
+                            const retryMsg = document.getElementById('retry-msg');
+                            if (retryBtn) {
+                                retryBtn.classList.remove('hidden');
+                                retryBtn.classList.add('retry-visible');
+                            }
+                            if (retryMsg) {
+                                retryMsg.classList.remove('hidden');
+                                retryMsg.classList.add('retry-visible');
+                            }
+                            progressContainer.classList.add('hidden');
+                        }
+                    } else {
+                        console.error('Failed to get progress.');
+                        clearInterval(interval);
+                        showMessage('Failed to get progress.', 'error');
+                        progressContainer.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('An error occurred while checking progress:', error);
+                    clearInterval(interval);
+                    showMessage('An error occurred while checking progress.', 'error');
+                    progressContainer.classList.add('hidden');
+                }
+            }, 500); // Poll every 0.5 seconds for smoother progress updates
+        }
+        
+        clearDownloadsBtn.addEventListener('click', async () => {
+            console.log('Clear Downloads button clicked.');
+            try {
+                const response = await fetch('/clear_downloads');
+                const data = await response.json();
+                console.log('Received response for clear downloads:', data);
+                if (response.ok) {
+                    showMessage(data.message, 'success');
+                } else {
+                    showMessage(data.error || 'Failed to clear downloads.', 'error');
+                }
+            } catch (error) {
+                console.error('An error occurred while clearing downloads:', error);
+                showMessage('An error occurred while clearing downloads.', 'error');
+            }
+            hideAllSections();
+            urlInput.value = '';
+        });
+
+        function hideAllSections() {
+            videoInfoDiv.classList.add('hidden');
+            fetchProgressContainer.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            downloadLinkContainer.classList.add('hidden');
+            messagesDiv.innerHTML = '';
+        }
+
+        function showSkeletonLoader() {
+            fetchProgressContainer.classList.remove('hidden');
+        }
+
+        function resetButtonState() {
+            getInfoBtn.classList.remove('btn-loading');
+            getInfoBtn.disabled = false;
+        }
+
+        // Add keyboard support
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !getInfoBtn.disabled) {
+                getInfoBtn.click();
+            }
+        });
+
+        // Auto-focus URL input on page load
+        window.addEventListener('load', () => {
+            urlInput.focus();
+        });
+
+        // Add paste detection for better UX
+        urlInput.addEventListener('paste', (e) => {
+            setTimeout(() => {
+                const pastedText = urlInput.value.trim();
+                if (pastedText && pastedText.includes('youtube.com') || pastedText.includes('youtu.be')) {
+                    showMessage('YouTube URL detected! Click Download to continue.', 'success');
+                }
+            }, 100);
+        });
+
+        // Paste button functionality
+        pasteBtn.addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    urlInput.value = text.trim();
+                    urlInput.focus();
+                    
+                    // Trigger paste detection
+                    if (text.includes('youtube.com') || text.includes('youtu.be')) {
+                        showMessage('YouTube URL pasted! Click Download to continue.', 'success');
+                    } else {
+                        showMessage('URL pasted from clipboard.', 'success');
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to read clipboard:', err);
+                showMessage('Unable to access clipboard. Please paste manually.', 'error');
+            }
+        });
+
+        // Retry button behavior
+        (function registerRetry() {
+            const retryBtn = document.getElementById('retry-btn');
+            if (!retryBtn) return;
+            retryBtn.addEventListener('click', () => {
+                if (!currentUrl) {
+                    showMessage('Please enter a YouTube URL first.', 'error');
+                    return;
+                }
+                const fmt = lastDownloadFormatId || selectedFormatId || 'best';
+                if (!fmt) {
+                    showMessage('Please select a format first.', 'error');
+                    return;
+                }
+                retryBtn.classList.add('hidden');
+                retryBtn.classList.remove('retry-visible');
+                const retryMsg = document.getElementById('retry-msg');
+                if (retryMsg) retryMsg.classList.add('hidden');
+                startDownload(fmt);
+            });
+        })();
+
+        // Register service worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

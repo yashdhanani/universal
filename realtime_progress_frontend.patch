@@ -1,0 +1,142 @@
+*** Begin Patch
+*** Update File: templates/universal.html
+@@
+-                    // Start polling backend progress
+-                    const taskId = data.task_id;
+-                    const progressBar = document.getElementById('download-progress');
+-                    const progressText = document.getElementById('download-progress-text');
+-                    const etaEl = document.getElementById('download-eta');
+-
+-                    const poll = setInterval(async () => {
+-                        try {
+-                            const r = await fetch(`/api/progress/${taskId}`);
+-                            const t = await r.json();
+-                            if (!r.ok) return;
+-
+-                            if (t.status === 'initializing' || t.status === 'preparing') {
+-                                progressText.textContent = t.progress || 'Preparing...';
+-                            } else if (t.status === 'downloading') {
+-                                const value = parseFloat(String(t.progress || '0').replace('%','')) || 0;
+-                                const clamped = Math.min(Math.max(value, 0), 100);
+-                                progressBar.style.width = `${clamped.toFixed(1)}%`;
+-                                progressText.textContent = t.progress || `Downloading... ${clamped.toFixed(1)}%`;
+-                                if (etaEl && t.eta_seconds) {
+-                                    const m = Math.floor(t.eta_seconds/60), s = t.eta_seconds%60;
+-                                    etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
+-                                }
+-                            } else if (t.status === 'processing') {
+-                                progressBar.style.width = '100%';
+-                                progressText.textContent = 'Processing...';
+-                            } else if (t.status === 'finished' && t.filename) {
+-                                clearInterval(poll);
+-                                // Hide progress and show download link
+-                                document.getElementById('download-progress-container').classList.add('hidden');
+-                                document.getElementById('download-ready-container').classList.remove('hidden');
+-                                // Set link
+-                                const downloadLink = document.getElementById('download-link');
+-                                const encoded = encodeURIComponent(t.filename);
+-                                downloadLink.href = `/download/${encoded}`;
+-                                downloadLink.download = t.filename;
+-                                // Auto-trigger download
+-                                try {
+-                                    const a = document.createElement('a');
+-                                    a.href = downloadLink.href;
+-                                    a.download = t.filename;
+-                                    document.body.appendChild(a);
+-                                    a.click();
+-                                    a.remove();
+-                                } catch {}
+-                            } else if (t.status === 'error') {
+-                                clearInterval(poll);
+-                                showMessage(t.error || 'Download failed.', 'error');
+-                                document.getElementById('download-progress-container').classList.add('hidden');
+-                                document.getElementById('media-info').classList.remove('hidden');
+-                            }
+-                        } catch (e) {
+-                            console.warn('Polling error', e);
+-                        }
+-                    }, 1000);
++                    // Start realtime progress via SSE, fallback to polling
++                    const taskId = data.task_id;
++                    const progressBar = document.getElementById('download-progress');
++                    const progressText = document.getElementById('download-progress-text');
++                    const etaEl = document.getElementById('download-eta');
++
++                    let cleanup = () => {};
++
++                    function handleUpdate(t) {
++                        if (!t) return;
++                        if (t.status === 'initializing' || t.status === 'preparing') {
++                            progressText.textContent = t.progress || 'Preparing...';
++                        } else if (t.status === 'downloading') {
++                            const value = parseFloat(String(t.progress || '0').replace('%','')) || 0;
++                            const clamped = Math.min(Math.max(value, 0), 100);
++                            progressBar.style.width = `${clamped.toFixed(1)}%`;
++                            progressText.textContent = t.progress || `Downloading... ${clamped.toFixed(1)}%`;
++                            if (etaEl && t.eta_seconds) {
++                                const m = Math.floor(t.eta_seconds/60), s = t.eta_seconds%60;
++                                etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
++                            }
++                        } else if (t.status === 'processing') {
++                            progressBar.style.width = '100%';
++                            progressText.textContent = 'Processing...';
++                        } else if (t.status === 'finished' && t.filename) {
++                            cleanup();
++                            // Hide progress and show download link
++                            document.getElementById('download-progress-container').classList.add('hidden');
++                            document.getElementById('download-ready-container').classList.remove('hidden');
++                            // Set link
++                            const downloadLink = document.getElementById('download-link');
++                            const encoded = encodeURIComponent(t.filename);
++                            downloadLink.href = `/download/${encoded}`;
++                            downloadLink.download = t.filename;
++                            // Auto-trigger download
++                            try {
++                                const a = document.createElement('a');
++                                a.href = downloadLink.href;
++                                a.download = t.filename;
++                                document.body.appendChild(a);
++                                a.click();
++                                a.remove();
++                            } catch {}
++                        } else if (t.status === 'error') {
++                            cleanup();
++                            showMessage(t.error || 'Download failed.', 'error');
++                            document.getElementById('download-progress-container').classList.add('hidden');
++                            document.getElementById('media-info').classList.remove('hidden');
++                        }
++                    }
++
++                    function startPolling() {
++                        const poll = setInterval(async () => {
++                            try {
++                                const r = await fetch(`/api/progress/${taskId}`);
++                                const t = await r.json();
++                                if (!r.ok) return;
++                                handleUpdate(t);
++                            } catch (e) {
++                                console.warn('Polling error', e);
++                            }
++                        }, 1000);
++                        cleanup = () => clearInterval(poll);
++                    }
++
++                    if ('EventSource' in window) {
++                        try {
++                            const es = new EventSource(`/api/progress-stream/${taskId}`);
++                            es.onmessage = (evt) => {
++                                try { handleUpdate(JSON.parse(evt.data)); } catch {}
++                            };
++                            es.onerror = () => {
++                                // Fallback to polling on error or disconnect
++                                try { es.close(); } catch {}
++                                startPolling();
++                            };
++                            cleanup = () => { try { es.close(); } catch {} };
++                        } catch (e) {
++                            startPolling();
++                        }
++                    } else {
++                        startPolling();
++                    }
+*** End Patch

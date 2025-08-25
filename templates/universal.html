@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <title>Universal Media Downloader - Download from Any Platform</title>
+    <meta name="description" content="Download videos and media from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast, free, and works on all devices.">
+    <meta name="theme-color" content="#667eea">
+    <link rel="stylesheet" href="/static/universal-style.css">
+    
+    <!-- PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Universal Downloader">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-nav">
+                <h1>🌐 Universal Media Downloader</h1>
+            </div>
+            <p class="subtitle">Download from YouTube, Instagram, Facebook, TikTok & more</p>
+        </header>
+
+        <div id="messages"></div>
+
+        <!-- Platform Selection -->
+        <div class="platform-selector">
+            <h3>🎯 Choose Platform</h3>
+            <div class="platform-grid">
+                <div class="platform-card active" data-platform="youtube">
+                    <div class="platform-icon">📺</div>
+                    <div class="platform-name">YouTube</div>
+                    <div class="platform-desc">Videos & Music</div>
+                </div>
+                <div class="platform-card" data-platform="instagram">
+                    <div class="platform-icon">📸</div>
+                    <div class="platform-name">Instagram</div>
+                    <div class="platform-desc">Posts, Stories, Reels</div>
+                </div>
+                <div class="platform-card" data-platform="facebook">
+                    <div class="platform-icon">👥</div>
+                    <div class="platform-name">Facebook</div>
+                    <div class="platform-desc">Videos & Posts</div>
+                </div>
+                <div class="platform-card" data-platform="tiktok">
+                    <div class="platform-icon">🎵</div>
+                    <div class="platform-name">TikTok</div>
+                    <div class="platform-desc">Short Videos</div>
+                </div>
+                <div class="platform-card" data-platform="twitter">
+                    <div class="platform-icon">🐦</div>
+                    <div class="platform-name">Twitter</div>
+                    <div class="platform-desc">Videos & GIFs</div>
+                </div>
+                <div class="platform-card" data-platform="pinterest">
+                    <div class="platform-icon">📌</div>
+                    <div class="platform-name">Pinterest</div>
+                    <div class="platform-desc">Images & Videos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL Input Section -->
+        <div class="form-container">
+            <div class="input-group">
+                <input type="text" id="media-url" placeholder="Paste URL from any supported platform..." required autocomplete="off" spellcheck="false">
+                <button id="paste-btn" type="button" class="paste-btn" title="Paste from clipboard">
+                    <span class="btn-icon">📋</span>
+                </button>
+            </div>
+            <button id="analyze-btn" type="button" class="primary-btn">
+                <span class="btn-text">Analyze</span>
+                <span class="btn-icon">🔍</span>
+            </button>
+        </div>
+
+        <!-- Platform-specific hints -->
+        <div class="platform-hints">
+            <div class="hint active" data-platform="youtube">
+                💡 <strong>YouTube:</strong> Paste any YouTube video URL (youtube.com or youtu.be)
+            </div>
+            <div class="hint" data-platform="instagram">
+                💡 <strong>Instagram:</strong> Paste post, story, or reel URL (instagram.com)
+            </div>
+            <div class="hint" data-platform="facebook">
+                💡 <strong>Facebook:</strong> Paste video or post URL (facebook.com or fb.watch)
+            </div>
+            <div class="hint" data-platform="tiktok">
+                💡 <strong>TikTok:</strong> Paste video URL (tiktok.com or vm.tiktok.com)
+            </div>
+            <div class="hint" data-platform="twitter">
+                💡 <strong>Twitter:</strong> Paste tweet URL with video (twitter.com or x.com)
+            </div>
+            <div class="hint" data-platform="pinterest">
+                💡 <strong>Pinterest:</strong> Paste pin URL (pinterest.com)
+            </div>
+        </div>
+
+        <!-- Media Info Display -->
+        <div id="media-info" class="section hidden">
+            <div class="media-preview">
+                <img id="media-thumbnail" src="" alt="Media Thumbnail" class="media-thumbnail">
+                <div class="media-overlay">
+                    <div class="platform-badge" id="detected-platform">
+                        <span class="platform-icon-small">📺</span>
+                        <span class="platform-text">YouTube</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 id="media-title" class="media-title">Media Title</h2>
+            
+            <div class="media-details">
+                <div class="media-detail-item">
+                    <span class="media-detail-label">⏱️ Duration</span>
+                    <span class="media-detail-value" id="media-duration">-</span>
+                </div>
+                <div class="media-detail-item">
+                    <span class="media-detail-label">👁️ Views</span>
+                    <span class="media-detail-value" id="media-views">-</span>
+                </div>
+                <div class="media-detail-item">
+                    <span class="media-detail-label">📅 Date</span>
+                    <span class="media-detail-value" id="media-date">-</span>
+                </div>
+                <div class="media-detail-item">
+                    <span class="media-detail-label">👤 Author</span>
+                    <span class="media-detail-value" id="media-author">-</span>
+                </div>
+            </div>
+            
+            <div id="quality-section" class="download-section">
+                <h3 style="margin-bottom:8px">🎚️ Select Quality</h3>
+                <div id="formats" class="format-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+                <button id="download-btn" class="primary-btn" type="button">
+                    <span class="btn-text">Download Selected Quality</span>
+                    <span class="btn-icon">⬇️</span>
+                </button>
+                <p class="download-note">If unsure, choose Best. Higher quality may produce MKV when merging.</p>
+            </div>
+        </div>
+
+        <!-- Progress Containers -->
+        <div id="analyze-progress-container" class="progress-container hidden">
+            <h3>🔍 Analyzing Media...</h3>
+            <div class="progress-bar">
+                <div class="progress" id="analyze-progress"></div>
+            </div>
+            <p id="analyze-progress-text">Detecting platform and fetching details...</p>
+            <p id="analyze-eta" style="margin-top:8px;color:#666">⏱️ Estimated time: ~12s</p>
+            <p id="analyze-hint" style="margin-top:8px;color:#666">⏱️ This may take 10–30 seconds depending on the video. Please keep this tab open.</p>
+        </div>
+
+        <div id="download-progress-container" class="progress-container hidden">
+            <h3>📥 Downloading...</h3>
+            <div class="progress-bar">
+                <div class="progress" id="download-progress"></div>
+            </div>
+            <p id="download-progress-text">Preparing download...</p>
+            <p id="download-eta" style="margin:6px 0 0;color:#666">⏱️ Estimated time: 1–5 minutes for long videos</p>
+            <div class="progress-tips">
+                ⏱️ Estimated time: typically 1–5 minutes for long videos. Please keep this tab open.
+            </div>
+            <div id="retry-container" class="hidden" style="margin-top:12px;display:flex;justify-content:center;">
+                <button id="retry-btn" class="retry-btn" type="button">🔄 Retry</button>
+            </div>
+        </div>
+
+        <!-- Download Ready -->
+        <div id="download-ready-container" class="section hidden">
+            <h3>🎉 Download Ready!</h3>
+            <p style="margin: 15px 0; color: #666;">Your media has been processed successfully</p>
+            <a id="download-link" class="primary-btn" href="#" download>
+                <span class="btn-text">Download File</span>
+                <span class="btn-icon">💾</span>
+            </a>
+            <div id="cookies-helper" class="section hidden" style="margin-top:16px">
+                <h4>Having trouble (403)? Upload cookies.txt</h4>
+                <input type="file" id="cookies-file" accept=".txt" />
+                <button id="upload-cookies-btn" class="primary-btn" type="button" style="margin-left:8px">Upload Cookies</button>
+                <p class="download-note">Export your YouTube cookies as cookies.txt and upload here, then retry.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="supported-platforms">
+                <h4>🌟 Supported Platforms</h4>
+                <div class="platform-badges">
+                    <span class="badge">📺 YouTube</span>
+                    <span class="badge">📸 Instagram</span>
+                    <span class="badge">👥 Facebook</span>
+                    <span class="badge">🎵 TikTok</span>
+                    <span class="badge">🐦 Twitter</span>
+                    <span class="badge">📌 Pinterest</span>
+                    <span class="badge">🎬 Vimeo</span>
+                    <span class="badge">📱 More...</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Universal Downloader JavaScript
+        const mediaUrlInput = document.getElementById('media-url');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const pasteBtn = document.getElementById('paste-btn');
+        const mediaInfoDiv = document.getElementById('media-info');
+        const platformCards = document.querySelectorAll('.platform-card');
+        const platformHints = document.querySelectorAll('.hint');
+        const messagesDiv = document.getElementById('messages');
+        
+        let selectedPlatform = 'youtube';
+        let currentUrl = '';
+        let selectedFormatId = null;
+
+        // Platform detection patterns
+        const platformPatterns = {
+            youtube: [/youtube\.com/, /youtu\.be/],
+            instagram: [/instagram\.com/, /instagr\.am/],
+            facebook: [/facebook\.com/, /fb\.watch/, /fb\.me/],
+            tiktok: [/tiktok\.com/, /vm\.tiktok\.com/],
+            twitter: [/twitter\.com/, /x\.com/, /t\.co/],
+            pinterest: [/pinterest\.com/, /pin\.it/]
+        };
+
+        // Platform icons mapping
+        const platformIcons = {
+            youtube: '📺',
+            instagram: '📸',
+            facebook: '👥',
+            tiktok: '🎵',
+            twitter: '🐦',
+            pinterest: '📌'
+        };
+
+        function showMessage(message, type = 'info') {
+            messagesDiv.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messagesDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        function detectPlatform(url) {
+            for (const [platform, patterns] of Object.entries(platformPatterns)) {
+                if (patterns.some(pattern => pattern.test(url))) {
+                    return platform;
+                }
+            }
+            return null;
+        }
+
+        function selectPlatform(platform) {
+            selectedPlatform = platform;
+            
+            // Update platform cards
+            platformCards.forEach(card => {
+                card.classList.toggle('active', card.dataset.platform === platform);
+            });
+            
+            // Update hints
+            platformHints.forEach(hint => {
+                hint.classList.toggle('active', hint.dataset.platform === platform);
+            });
+            
+            // Update placeholder
+            const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+            mediaUrlInput.placeholder = `Paste ${platformName} URL here...`;
+        }
+
+        // Platform card click handlers
+        platformCards.forEach(card => {
+            card.addEventListener('click', () => {
+                selectPlatform(card.dataset.platform);
+            });
+        });
+
+        // Paste button functionality
+        pasteBtn.addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    mediaUrlInput.value = text.trim();
+                    mediaUrlInput.focus();
+                    
+                    // Auto-detect platform
+                    const detectedPlatform = detectPlatform(text);
+                    if (detectedPlatform) {
+                        selectPlatform(detectedPlatform);
+                        showMessage(`${detectedPlatform.charAt(0).toUpperCase() + detectedPlatform.slice(1)} URL detected! Click Analyze to continue.`, 'success');
+                    } else {
+                        showMessage('URL pasted from clipboard.', 'success');
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to read clipboard:', err);
+                showMessage('Unable to access clipboard. Please paste manually.', 'error');
+            }
+        });
+
+        // URL input paste detection
+        mediaUrlInput.addEventListener('paste', (e) => {
+            setTimeout(() => {
+                const pastedText = mediaUrlInput.value.trim();
+                if (pastedText) {
+                    const detectedPlatform = detectPlatform(pastedText);
+                    if (detectedPlatform) {
+                        selectPlatform(detectedPlatform);
+                        showMessage(`${detectedPlatform.charAt(0).toUpperCase() + detectedPlatform.slice(1)} URL detected!`, 'success');
+                    }
+                }
+            }, 100);
+        });
+
+        // Analyze button click handler
+        analyzeBtn.addEventListener('click', async () => {
+            const url = mediaUrlInput.value.trim();
+            if (!url) {
+                showMessage('Please enter a media URL.', 'error');
+                return;
+            }
+
+            // Auto-detect platform if not manually selected
+            const detectedPlatform = detectPlatform(url);
+            if (detectedPlatform && detectedPlatform !== selectedPlatform) {
+                selectPlatform(detectedPlatform);
+            }
+
+            currentUrl = url;
+            
+            // Add loading state
+            analyzeBtn.classList.add('btn-loading');
+            analyzeBtn.disabled = true;
+            
+            // Hide all sections and show progress
+            hideAllSections();
+            document.getElementById('analyze-progress-container').classList.remove('hidden');
+            
+            // Simulate analysis progress
+            const analyzeInterval = simulateProgress('analyze');
+            const analyzeEtaEl = document.getElementById('analyze-eta');
+            if (analyzeEtaEl) analyzeEtaEl.textContent = '⏱️ Estimated time: ~12s';
+            
+            try {
+                console.log('Analyzing URL:', url, 'Platform:', selectedPlatform);
+                
+                console.log('Analyzing URL:', url, 'Platform:', selectedPlatform);
+                
+                // This is where you'll add your backend API calls for different platforms
+                const response = await fetch(`/api/${selectedPlatform}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                
+                console.log('Response status:', response.status);
+                
+                console.log('Response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                console.log('Response data:', data);
+                
+                if (response.ok) {
+                    displayMediaInfo(data);
+                } else {
+                    showMessage(data.error || 'Failed to analyze media.', 'error');
+                }
+            } catch (error) {
+                console.error('Analysis error:', error);
+                showMessage('An error occurred while analyzing the media.', 'error');
+            } finally {
+                // Reset button state
+                analyzeBtn.classList.remove('btn-loading');
+                analyzeBtn.disabled = false;
+                document.getElementById('analyze-progress-container').classList.add('hidden');
+            }
+        });
+
+        function displayMediaInfo(data) {
+            console.log('Displaying media info:', data);
+            
+            console.log('Displaying media info:', data);
+            
+            // Update detected platform badge
+            const platformBadge = document.getElementById('detected-platform');
+            platformBadge.innerHTML = `
+                <span class="platform-icon-small">${platformIcons[selectedPlatform]}</span>
+                <span class="platform-text">${selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1)}</span>
+            `;
+            
+            // Update media info
+            document.getElementById('media-title').textContent = data.title || 'Unknown Title';
+            document.getElementById('media-thumbnail').src = data.thumbnail || '';
+            document.getElementById('media-duration').textContent = data.duration || 'N/A';
+            document.getElementById('media-views').textContent = data.views || 'N/A';
+            document.getElementById('media-date').textContent = data.date || 'N/A';
+            document.getElementById('media-author').textContent = data.author || 'N/A';
+            
+            // Display formats and keep a map for direct URLs
+            console.log('Formats to display:', data.formats);
+            const formatsArr = data.formats || [];
+            const directUrlByFormat = {};
+            for (const f of formatsArr) {
+                if (f && f.is_progressive && f.direct_url) {
+                    directUrlByFormat[f.format_id] = f.direct_url;
+                }
+            }
+            window.__directUrlByFormat = directUrlByFormat;
+            displayFormats(formatsArr);
+            
+            // Show media info
+            mediaInfoDiv.classList.remove('hidden');
+            console.log('Media info displayed');
+            console.log('Media info displayed');
+        }
+
+        function displayFormats(formats) {
+            const list = document.getElementById('formats');
+            list.innerHTML = '';
+            selectedFormatId = 'best';
+            
+            // Add a default "Best" option
+            const bestBtn = document.createElement('button');
+            bestBtn.type = 'button';
+            bestBtn.className = 'quality-chip active';
+            bestBtn.textContent = 'Best';
+            bestBtn.dataset.formatId = 'best';
+            list.appendChild(bestBtn);
+            
+            // Build quality chips from available formats
+            const videoFormats = (formats || [])
+                .filter(f => (f.vcodec && f.vcodec !== 'none') || f.height)
+                .sort((a, b) => (b.height || 0) - (a.height || 0));
+            
+            for (const f of videoFormats) {
+                const label = `${f.quality || (f.height? f.height+"p" : 'Video')} ${f.ext ? f.ext.toUpperCase() : ''}`.trim();
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'quality-chip';
+                chip.textContent = label;
+                chip.title = `${f.resolution || ''} ${f.fps? f.fps+"fps" : ''} ${f.filesize_mb? '('+f.filesize_mb.toFixed? f.filesize_mb.toFixed(1):f.filesize_mb+' MB)' : ''}`.trim();
+                chip.dataset.formatId = f.format_id;
+                list.appendChild(chip);
+            }
+            
+            // Selection behavior
+            list.addEventListener('click', (e) => {
+                const btn = e.target.closest('button.quality-chip');
+                if (!btn) return;
+                list.querySelectorAll('button.quality-chip').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedFormatId = btn.dataset.formatId || 'best';
+            }, { once: true });
+        }
+
+        function simulateProgress(type) {
+            const progressBar = document.getElementById(`${type}-progress`);
+            const progressText = document.getElementById(`${type}-progress-text`);
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 95) {
+                    progress = 95;
+                    clearInterval(interval);
+                }
+                
+                progressBar.style.width = `${progress.toFixed(1)}%`;
+                
+                if (type === 'analyze') {
+                    progressText.textContent = `Analyzing ${selectedPlatform} content... ${progress.toFixed(1)}%`;
+                    const etaEl = document.getElementById('analyze-eta');
+                    if (etaEl) {
+                        const remaining = Math.max(0, 12 - (progress/100)*12);
+                        etaEl.textContent = `⏱️ Estimated time: ~${Math.ceil(remaining)}s`;
+                    }
+                } else {
+                    progressText.textContent = `Downloading... ${progress.toFixed(1)}%`;
+                    const etaEl = document.getElementById('download-eta');
+                    if (etaEl) {
+                        const totalSec = 360; // worst-case 6 min
+                        const remaining = Math.max(5, Math.ceil((1 - (progress/100)) * totalSec));
+                        const m = Math.floor(remaining/60), s = remaining%60;
+                        etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
+                    }
+                }
+            }, 200);
+            
+            return interval;
+        }
+
+        function hideAllSections() {
+            document.getElementById('media-info').classList.add('hidden');
+            document.getElementById('analyze-progress-container').classList.add('hidden');
+            document.getElementById('download-progress-container').classList.add('hidden');
+            document.getElementById('download-ready-container').classList.add('hidden');
+            messagesDiv.innerHTML = '';
+        }
+
+        // Download button functionality
+        document.getElementById('download-btn').addEventListener('click', async () => {
+            if (!selectedFormatId) {
+                selectedFormatId = 'best'; // Fallback to best quality
+            }
+
+            const downloadBtn = document.getElementById('download-btn');
+            
+            // Add loading state
+            downloadBtn.classList.add('btn-loading');
+            downloadBtn.disabled = true;
+            
+            // If a direct URL is available for the selected format, trigger direct browser download first
+            const directMap = window.__directUrlByFormat || {};
+            const directUrl = directMap[selectedFormatId];
+            if (directUrl) {
+                try {
+                    const a = document.createElement('a');
+                    a.href = directUrl;
+                    a.download = '';
+                    a.rel = 'noopener';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    // Also show the ready section with a link for convenience
+                    document.getElementById('download-ready-container').classList.remove('hidden');
+                    const dl = document.getElementById('download-link');
+                    if (dl) dl.href = directUrl;
+                    // No backend task needed
+                    downloadBtn.classList.remove('btn-loading');
+                    downloadBtn.disabled = false;
+                    return;
+                } catch (e) {
+                    console.warn('Direct URL download failed, falling back to backend:', e);
+                }
+            }
+
+            // Hide media info and show download progress
+            document.getElementById('media-info').classList.add('hidden');
+            document.getElementById('download-progress-container').classList.remove('hidden');
+            
+            // Simulate download progress
+            const progressInterval = simulateProgress('download');
+            
+            try {
+                // Call download API
+                const response = await fetch(`/api/${selectedPlatform}/download`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        url: currentUrl, 
+                        format_id: selectedFormatId 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Start realtime progress via SSE, fallback to polling
+                    const taskId = data.task_id;
+                    const progressBar = document.getElementById('download-progress');
+                    const progressText = document.getElementById('download-progress-text');
+                    const etaEl = document.getElementById('download-eta');
+
+                    let cleanup = () => {};
+
+                    function handleUpdate(t) {
+                        if (!t) return;
+                        if (t.status === 'initializing' || t.status === 'preparing') {
+                            progressText.textContent = t.progress || 'Preparing...';
+                        } else if (t.status === 'downloading') {
+                            const value = parseFloat(String(t.progress || '0').replace('%','')) || 0;
+                            const clamped = Math.min(Math.max(value, 0), 100);
+                            progressBar.style.width = `${clamped.toFixed(1)}%`;
+                            progressText.textContent = t.progress || `Downloading... ${clamped.toFixed(1)}%`;
+                            if (etaEl && t.eta_seconds) {
+                                const m = Math.floor(t.eta_seconds/60), s = t.eta_seconds%60;
+                                etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
+                            }
+                        } else if (t.status === 'processing') {
+                            progressBar.style.width = '100%';
+                            progressText.textContent = 'Processing...';
+                        } else if (t.status === 'finished' && t.filename) {
+                            cleanup();
+                            // Hide progress and show download link
+                            document.getElementById('download-progress-container').classList.add('hidden');
+                            document.getElementById('download-ready-container').classList.remove('hidden');
+                            // Set link
+                            const downloadLink = document.getElementById('download-link');
+                            const encoded = encodeURIComponent(t.filename);
+                            downloadLink.href = `/download/${encoded}`;
+                            downloadLink.download = t.filename;
+                            // Auto-trigger download
+                            try {
+                                const a = document.createElement('a');
+                                a.href = downloadLink.href;
+                                a.download = t.filename;
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                            } catch {}
+                        } else if (t.status === 'error') {
+                            cleanup();
+                            showMessage(t.error || 'Download failed.', 'error');
+                            const retryC = document.getElementById('retry-container');
+                            const retryBtn = document.getElementById('retry-btn');
+                            if (retryC && retryBtn) {
+                                retryC.classList.remove('hidden');
+                                retryBtn.onclick = async function () {
+                                    retryC.classList.add('hidden');
+                                    // Re-trigger same download request
+                                    document.getElementById('download-progress-container').classList.remove('hidden');
+                                    // Simulate progress again quickly
+                                    simulateProgress('download');
+                                    try {
+                                        const resp = await fetch(`/api/${selectedPlatform}/download`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ url: currentUrl, format_id: selectedFormatId || 'best' })
+                                        });
+                                        const d2 = await resp.json();
+                                        if (resp.ok && d2.task_id) {
+                                            // Start new tracking flow
+                                            const newTask = d2.task_id;
+                                            // Restart SSE/polling
+                                            function restartHandle(t2){ handleUpdate(t2); }
+                                            if ('EventSource' in window) {
+                                                try {
+                                                    const es2 = new EventSource(`/api/progress-stream/${newTask}`);
+                                                    es2.onmessage = (evt) => { try { restartHandle(JSON.parse(evt.data)); } catch {} };
+                                                    es2.onerror = () => { try { es2.close(); } catch {}; startPolling(); };
+                                                    cleanup = () => { try { es2.close(); } catch {} };
+                                                } catch (e) { startPolling(); }
+                                            } else { startPolling(); }
+                                        } else {
+                                            showMessage(d2.error || 'Retry failed to start.', 'error');
+                                        }
+                                    } catch (err) {
+                                        showMessage('Retry failed. Please try again.', 'error');
+                                    }
+                                };
+                            }
+                            // Keep progress container visible so Retry is shown
+                            document.getElementById('download-progress-container').classList.remove('hidden');
+                            document.getElementById('media-info').classList.add('hidden');
+                        }
+                    }
+
+                    function startPolling() {
+                        const poll = setInterval(async () => {
+                            try {
+                                const r = await fetch(`/api/progress/${taskId}`);
+                                const t = await r.json();
+                                if (!r.ok) return;
+                                handleUpdate(t);
+                            } catch (e) {
+                                console.warn('Polling error', e);
+                            }
+                        }, 1000);
+                        cleanup = () => clearInterval(poll);
+                    }
+
+                    if ('EventSource' in window) {
+                        try {
+                            const es = new EventSource(`/api/progress-stream/${taskId}`);
+                            es.onmessage = (evt) => {
+                                try { handleUpdate(JSON.parse(evt.data)); } catch {}
+                            };
+                            es.onerror = () => {
+                                // Fallback to polling on error
+                                try { es.close(); } catch {}
+                                startPolling();
+                            };
+                            cleanup = () => { try { es.close(); } catch {} };
+                        } catch (e) {
+                            startPolling();
+                        }
+                    } else {
+                        startPolling();
+                    }
+                } else {
+                    showMessage(data.error || 'Download failed.', 'error');
+                    // If 403, prompt cookies upload helper
+                    if (response.status === 403) {
+                        const helper = document.getElementById('cookies-helper');
+                        if (helper) helper.classList.remove('hidden');
+                    }
+                    document.getElementById('download-progress-container').classList.add('hidden');
+                    document.getElementById('media-info').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Download error:', error);
+                showMessage('An error occurred during download.', 'error');
+                document.getElementById('download-progress-container').classList.add('hidden');
+                document.getElementById('media-info').classList.remove('hidden');
+            } finally {
+                clearInterval(progressInterval);
+                downloadBtn.classList.remove('btn-loading');
+                downloadBtn.disabled = false;
+            }
+        });
+
+        // Cookies upload handler
+        const cookiesFileInput = document.getElementById('cookies-file');
+        const uploadCookiesBtn = document.getElementById('upload-cookies-btn');
+        if (uploadCookiesBtn) {
+            uploadCookiesBtn.addEventListener('click', async () => {
+                if (!cookiesFileInput || !cookiesFileInput.files || !cookiesFileInput.files[0]) {
+                    showMessage('Please choose a cookies.txt file first.', 'error');
+                    return;
+                }
+                try {
+                    const form = new FormData();
+                    form.append('cookies', cookiesFileInput.files[0]);
+                    const resp = await fetch('/api/upload_cookies', { method: 'POST', body: form });
+                    const d = await resp.json();
+                    if (resp.ok) {
+                        showMessage('Cookies uploaded. Please retry analyze/download.', 'success');
+                    } else {
+                        showMessage(d.error || 'Failed to upload cookies.', 'error');
+                    }
+                } catch (e) {
+                    showMessage('Upload failed. Try again.', 'error');
+                }
+            });
+        }
+
+        // Keyboard support
+        mediaUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !analyzeBtn.disabled) {
+                analyzeBtn.click();
+            }
+        });
+
+        // Auto-focus on load
+        window.addEventListener('load', () => {
+            mediaUrlInput.focus();
+        });
+    </script>
+</body>
+</html>
