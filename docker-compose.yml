@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  api:
+    build: .
+    depends_on:
+      - redis
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DOWNLOAD_FOLDER=/data/downloads
+      - CACHE_TTL_MINUTES=60
+      # Set at runtime or in an .env file used by compose
+      # - API_KEYS=your_secret_key1,your_secret_key2
+      # - SECRET_KEY=change_me
+      # - CORS_ALLOW_ORIGINS=https://app1.ngrok.app,https://app2.ngrok.app,http://localhost:3000
+      - CORS_ALLOW_ORIGINS
+    ports:
+      - "8000:8000"
+    volumes:
+      - app-data:/data
+    command: ["uvicorn", "main_api:APP", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
+
+  worker:
+    build: .
+    depends_on:
+      - redis
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DOWNLOAD_FOLDER=/data/downloads
+    volumes:
+      - app-data:/data
+    command: ["celery", "-A", "backend.tasks.celery_app.celery", "worker", "--loglevel=INFO"]
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    depends_on:
+      - api
+    profiles: ["tunnel"]  # enable with: docker compose --profile tunnel up -d
+    environment:
+      # Provide your authtoken at runtime: NGROK_AUTHTOKEN=... docker compose up
+      - NGROK_AUTHTOKEN
+    command: ["http", "api:8000", "--host-header=rewrite"]
+    # Optional: expose the ngrok web UI (inspect requests) on localhost:4040
+    ports:
+      - "4040:4040"
+
+volumes:
+  redis-data:
+  app-data:

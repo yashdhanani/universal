@@ -3,27 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
-    <title>Universal Media Downloader - Download from Any Platform</title>
-    <meta name="description" content="Download videos and media from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast, free, and works on all devices.">
+    <title>MediDown.com — Universal Media Downloader | Download from YouTube, Instagram, Facebook, TikTok, Twitter</title>
+    <meta name="description" content="MediDown.com — Download videos and media from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast, free, and works on all devices.">
+    <link rel="canonical" href="https://medidown.com/">
+    <meta name="application-name" content="MediDown">
+    <meta property="og:site_name" content="MediDown.com">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://medidown.com/">
+    <meta property="og:title" content="MediDown.com — Universal Media Downloader">
+    <meta property="og:description" content="Download videos and media from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast, free, and works on all devices.">
+    <meta property="og:image" content="https://medidown.com/static/og-default.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MediDown.com — Universal Media Downloader">
+    <meta name="twitter:description" content="Download videos and media from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast, free, and works on all devices.">
+    <meta name="twitter:image" content="https://medidown.com/static/og-default.svg">
     <meta name="theme-color" content="#667eea">
-    <link rel="stylesheet" href="/static/universal-style.css">
+    <link rel="stylesheet" href="{{ asset_prefix }}/universal-style.css">
+    
+    <meta name="google-adsense-account" content="{{ adsense_client or 'ca-pub-7668887187349710' }}">
     
     <!-- PWA support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Universal Downloader">
+    <meta name="apple-mobile-web-app-title" content="MediDown">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+    <link rel="icon" type="image/x-icon" href="{{ asset_prefix }}/og-default.svg">
+
+    {% if adsense_enabled and adsense_client %}
+    <!-- Google AdSense Global Script (loaded after consent) + Consent Mode stub -->
+    <script>
+      // Google Consent Mode default (updated on choice)
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);} 
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+      });
+
+      window.__adsenseClient = '{{ adsense_client }}';
+      window.__adsConsentGranted = false;
+      function loadAdsenseScript(){
+        if (!window.__adsenseClient || document.getElementById('adsense-lib')) return;
+        const s = document.createElement('script');
+        s.id = 'adsense-lib';
+        s.async = true;
+        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${window.__adsenseClient}`;
+        s.crossOrigin = 'anonymous';
+        document.head.appendChild(s);
+      }
+    </script>
+    {% endif %}
+    {% if gtag_id %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ gtag_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);} gtag('js', new Date());
+      gtag('config', '{{ gtag_id }}');
+    </script>
+    {% endif %}
+
+    <!-- GA events: ad impression tracking via IntersectionObserver -->
+    <script>
+      window.__trackAdImpressions = function(){
+        try {
+          if (!('IntersectionObserver' in window) || !window.gtag) return;
+          const seen = new WeakSet();
+          const obs = new IntersectionObserver((entries)=>{
+            for (const e of entries){
+              if (e.isIntersecting && !seen.has(e.target)){
+                seen.add(e.target);
+                try { gtag('event', 'ad_impression', { location: e.target.dataset.adLocation || 'unknown' }); } catch {}
+              }
+            }
+          }, { threshold: 0.5 });
+          document.querySelectorAll('ins.adsbygoogle').forEach(el=>{
+            // best-effort label from nearby DOM
+            if (!el.dataset.adLocation) {
+              if (el.closest('header')) el.dataset.adLocation = 'header';
+              else if (el.closest('#download-ready-container')) el.dataset.adLocation = 'inarticle';
+              else if (el.closest('footer')) el.dataset.adLocation = 'footer';
+              else if (el.closest('.sidebar-ad')) el.dataset.adLocation = 'sidebar';
+              else el.dataset.adLocation = 'inline';
+            }
+            obs.observe(el);
+          });
+        } catch {}
+      };
+      window.addEventListener('load', function(){ setTimeout(()=>{ if (window.__trackAdImpressions) window.__trackAdImpressions(); }, 1500); });
+    </script>
+    
+    <!-- SEO: platform-specific keywords and structured data -->
+    <meta name="keywords" content="YouTube video downloader, YouTube downloader online, download YouTube MP4, YouTube to MP3, download YouTube 1080p, download YouTube 4K, Instagram video downloader, Instagram Reels downloader, Instagram Story downloader, download Instagram videos, Facebook video downloader, download Facebook videos, FB video downloader, TikTok downloader, TikTok video downloader, save TikTok without watermark, Twitter video downloader, X video downloader, download Twitter videos, Pinterest downloader, download Pinterest videos, download Pinterest images, online video downloader, free video downloader, fast video downloader, HD video download">
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "MediDown",
+      "url": "https://medidown.com/",
+      "inLanguage": "en",
+      "keywords": "YouTube video downloader, YouTube downloader online, download YouTube MP4, YouTube to MP3, Instagram video downloader, Instagram Reels downloader, Facebook video downloader, TikTok downloader, Twitter video downloader, Pinterest downloader, online video downloader",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://medidown.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "hasPart": [
+        {"@type": "WebPage", "name": "YouTube Downloader", "url": "https://medidown.com/youtube-downloader", "keywords": "YouTube video downloader, download YouTube MP4, YouTube to MP3, 1080p, 4K"},
+        {"@type": "WebPage", "name": "Instagram Downloader", "url": "https://medidown.com/instagram-downloader", "keywords": "Instagram video downloader, Reels downloader, Story downloader"},
+        {"@type": "WebPage", "name": "Facebook Downloader", "url": "https://medidown.com/facebook-downloader", "keywords": "Facebook video downloader, download Facebook videos"},
+        {"@type": "WebPage", "name": "TikTok Downloader", "url": "https://medidown.com/tiktok-downloader", "keywords": "TikTok downloader, save TikTok without watermark"},
+        {"@type": "WebPage", "name": "Twitter/X Downloader", "url": "https://medidown.com/twitter-downloader", "keywords": "Twitter video downloader, X video downloader"},
+        {"@type": "WebPage", "name": "Pinterest Downloader", "url": "https://medidown.com/pinterest-downloader", "keywords": "Pinterest downloader, download Pinterest videos, images"}
+      ]
+    }
+    </script>
 </head>
 <body>
+    <!-- Consent banner for GDPR/CCPA + TCF v2.2 notice -->
+    <div id="consent-banner" style="position:fixed;left:0;right:0;bottom:0;background:#111;color:#fff;padding:12px 16px;display:none;z-index:9999">
+      <div style="max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px;font-size:14px">
+          We use cookies and process data (including personalized ads) per our privacy policy. Manage your choices below. We support TCF v2.2 signals.
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="consent-accept" class="primary-btn" style="padding:10px 14px">Accept</button>
+          <button id="consent-decline" class="retry-btn" style="padding:10px 14px;background:#555">Decline</button>
+        </div>
+      </div>
+    </div>
     <div class="container">
         <header class="header">
             <div class="header-nav">
-                <h1>🌐 Universal Media Downloader</h1>
+                <h1>🌐 MediDown.com — Universal Media Downloader</h1>
             </div>
             <p class="subtitle">Download from YouTube, Instagram, Facebook, TikTok & more</p>
+
+            {% if adsense_enabled and adsense_client and adsense_header_slot %}
+            <!-- Header Ad Unit -->
+            <div style="min-height:90px;">
+              <ins class="adsbygoogle"
+                   style="display:block; min-height:90px;"
+                   data-ad-client="{{ adsense_client }}"
+                   data-ad-slot="{{ adsense_header_slot }}"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"
+                   {% if adsense_test_mode %}data-adtest="on"{% endif %}></ins>
+            </div>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+            {% endif %}
         </header>
+
+        <!-- Quick links for platforms -->
+        <nav aria-label="Quick platform links" class="quick-links" style="margin:8px 0 12px;display:flex;gap:10px;flex-wrap:wrap">
+            <a href="#youtube" class="badge">YouTube</a>
+            <a href="#instagram" class="badge">Instagram</a>
+            <a href="#facebook" class="badge">Facebook</a>
+            <a href="#tiktok" class="badge">TikTok</a>
+            <a href="#twitter" class="badge">Twitter/X</a>
+            <a href="#pinterest" class="badge">Pinterest</a>
+        </nav>
 
         <div id="messages"></div>
 
@@ -31,32 +174,32 @@
         <div class="platform-selector">
             <h3>🎯 Choose Platform</h3>
             <div class="platform-grid">
-                <div class="platform-card active" data-platform="youtube">
+                <div class="platform-card active" id="youtube" data-platform="youtube">
                     <div class="platform-icon">📺</div>
                     <div class="platform-name">YouTube</div>
                     <div class="platform-desc">Videos & Music</div>
                 </div>
-                <div class="platform-card" data-platform="instagram">
+                <div class="platform-card" id="instagram" data-platform="instagram">
                     <div class="platform-icon">📸</div>
                     <div class="platform-name">Instagram</div>
                     <div class="platform-desc">Posts, Stories, Reels</div>
                 </div>
-                <div class="platform-card" data-platform="facebook">
+                <div class="platform-card" id="facebook" data-platform="facebook">
                     <div class="platform-icon">👥</div>
                     <div class="platform-name">Facebook</div>
                     <div class="platform-desc">Videos & Posts</div>
                 </div>
-                <div class="platform-card" data-platform="tiktok">
-                    <div class="platform-icon">🎵</div>
+                <div class="platform-card" id="tiktok" data-platform="tiktok">
+                    <div class="platform-icon">🎬</div>
                     <div class="platform-name">TikTok</div>
                     <div class="platform-desc">Short Videos</div>
                 </div>
-                <div class="platform-card" data-platform="twitter">
+                <div class="platform-card" id="twitter" data-platform="twitter">
                     <div class="platform-icon">🐦</div>
                     <div class="platform-name">Twitter</div>
                     <div class="platform-desc">Videos & GIFs</div>
                 </div>
-                <div class="platform-card" data-platform="pinterest">
+                <div class="platform-card" id="pinterest" data-platform="pinterest">
                     <div class="platform-icon">📌</div>
                     <div class="platform-name">Pinterest</div>
                     <div class="platform-desc">Images & Videos</div>
@@ -77,6 +220,41 @@
                 <span class="btn-icon">🔍</span>
             </button>
         </div>
+
+        {% if adsense_enabled and adsense_client and adsense_sidebar_slot %}
+        <!-- Sidebar-like box ad for wide screens -->
+        <div class="sidebar-ad" style="display:none;"></div>
+        <style>
+          @media(min-width: 1100px){ .sidebar-ad{ display:block; position:fixed; right:20px; top:120px; width:300px; z-index:9; }
+            .container{ max-width: 1000px; margin-right:340px; } }
+        </style>
+        <div class="sidebar-ad">
+          <div style="width:300px; min-height:250px;">
+            <ins class="adsbygoogle"
+                 style="display:block; width:300px; min-height:250px"
+                 data-ad-client="{{ adsense_client }}"
+                 data-ad-slot="{{ adsense_sidebar_slot }}"
+                 data-ad-format="auto"
+                 data-full-width-responsive="false"
+                 {% if adsense_test_mode %}data-adtest="on"{% endif %}></ins>
+          </div>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+        </div>
+        {% endif %}
+
+        {% if adsense_enabled and adsense_client and adsense_infeed_slot and adsense_infeed_layout_key %}
+        <!-- In-feed Ad Unit (between form and hints) -->
+        <div style="min-height:120px;">
+          <ins class="adsbygoogle"
+               style="display:block; min-height:120px;"
+               data-ad-format="fluid"
+               data-ad-layout-key="{{ adsense_infeed_layout_key }}"
+               data-ad-client="{{ adsense_client }}"
+               data-ad-slot="{{ adsense_infeed_slot }}"
+               {% if adsense_test_mode %}data-adtest="on"{% endif %}></ins>
+        </div>
+        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+        {% endif %}
 
         <!-- Platform-specific hints -->
         <div class="platform-hints">
@@ -103,7 +281,7 @@
         <!-- Media Info Display -->
         <div id="media-info" class="section hidden">
             <div class="media-preview">
-                <img id="media-thumbnail" src="" alt="Media Thumbnail" class="media-thumbnail">
+                <img id="media-thumbnail" src="/static/og-default.svg" alt="Media Thumbnail" class="media-thumbnail" onerror="this.src='/static/og-default.svg'; this.onerror=null;">
                 <div class="media-overlay">
                     <div class="platform-badge" id="detected-platform">
                         <span class="platform-icon-small">📺</span>
@@ -112,9 +290,26 @@
                 </div>
             </div>
             
+            {% if adsense_enabled and adsense_client and adsense_inline_slot %}
+            <!-- Inline Ad Unit (below preview) -->
+            <div style="min-height:90px; margin: 12px 0;">
+              <ins class="adsbygoogle"
+                   style="display:block; min-height:90px;"
+                   data-ad-client="{{ adsense_client }}"
+                   data-ad-slot="{{ adsense_inline_slot }}"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+            </div>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+            {% endif %}
+            
             <h2 id="media-title" class="media-title">Media Title</h2>
             
             <div class="media-details">
+                <div class="media-detail-item">
+                    <span class="media-detail-label">🎬 Type</span>
+                    <span class="media-detail-value" id="media-type">-</span>
+                </div>
                 <div class="media-detail-item">
                     <span class="media-detail-label">⏱️ Duration</span>
                     <span class="media-detail-value" id="media-duration">-</span>
@@ -135,12 +330,32 @@
             
             <div id="quality-section" class="download-section">
                 <h3 style="margin-bottom:8px">🎚️ Select Quality</h3>
+                <div id="format-tabs" class="format-tabs" style="display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap">
+                    <button type="button" class="tab-btn active" data-tab="all">All</button>
+                    <button type="button" class="tab-btn" data-tab="video">Video</button>
+                    <button type="button" class="tab-btn" data-tab="audio">Audio</button>
+                    <button type="button" class="tab-btn" data-tab="image">Images</button>
+                </div>
+                <div id="format-legend" class="muted" style="font-size:13px;margin:4px 0 8px;">
+                    Legend: 🎵 with audio • 🔇 without audio • Instant = direct download (no merge)
+                </div>
                 <div id="formats" class="format-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
                 <button id="download-btn" class="primary-btn" type="button">
                     <span class="btn-text">Download Selected Quality</span>
                     <span class="btn-icon">⬇️</span>
                 </button>
                 <p class="download-note">If unsure, choose Best. Higher quality may produce MKV when merging.</p>
+            </div>
+
+            <!-- Instant Download Panel (progressive direct URLs) -->
+            <div id="instant-panel" class="download-section hidden">
+                <h3 style="margin-bottom:8px;color:#2563eb">🚀 Instant Download</h3>
+                <div id="instant-links" class="format-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+                <button id="instant-best-btn" class="primary-btn" type="button" style="background:linear-gradient(90deg,#3b82f6,#4f46e5)">
+                    <span class="btn-text">Best Quality (Instant)</span>
+                    <span class="btn-icon">⚡</span>
+                </button>
+                <p class="download-note">Instant links stream directly from the source CDN (no server merging).</p>
             </div>
         </div>
 
@@ -178,6 +393,19 @@
                 <span class="btn-text">Download File</span>
                 <span class="btn-icon">💾</span>
             </a>
+
+            {% if adsense_enabled and adsense_client and adsense_inarticle_slot %}
+            <!-- In-article Ad Unit (near completion message) -->
+            <div style="min-height:120px; margin: 16px 0;">
+              <ins class="adsbygoogle"
+                   style="display:block; min-height:120px;"
+                   data-ad-client="{{ adsense_client }}"
+                   data-ad-slot="{{ adsense_inarticle_slot }}"
+                   data-ad-format="fluid"></ins>
+            </div>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+            {% endif %}
+
             <div id="cookies-helper" class="section hidden" style="margin-top:16px">
                 <h4>Having trouble (403)? Upload cookies.txt</h4>
                 <input type="file" id="cookies-file" accept=".txt" />
@@ -188,13 +416,35 @@
 
         <!-- Footer -->
         <footer class="footer">
+            {% if adsense_enabled and adsense_client and adsense_multiplex_slot %}
+            <!-- Multiplex Ad Unit (footer) -->
+            <div style="min-height:180px;">
+              <ins class="adsbygoogle"
+                   style="display:block; min-height:180px;"
+                   data-ad-format="autorelaxed"
+                   data-ad-client="{{ adsense_client }}"
+                   data-ad-slot="{{ adsense_multiplex_slot }}"></ins>
+            </div>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+            {% elif adsense_enabled and adsense_client and adsense_footer_slot %}
+            <!-- Fallback Footer Ad Unit (auto) -->
+            <div style="min-height:90px;">
+              <ins class="adsbygoogle"
+                   style="display:block; min-height:90px;"
+                   data-ad-client="{{ adsense_client }}"
+                   data-ad-slot="{{ adsense_footer_slot }}"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+            </div>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+            {% endif %}
             <div class="supported-platforms">
                 <h4>🌟 Supported Platforms</h4>
                 <div class="platform-badges">
                     <span class="badge">📺 YouTube</span>
                     <span class="badge">📸 Instagram</span>
                     <span class="badge">👥 Facebook</span>
-                    <span class="badge">🎵 TikTok</span>
+                    <span class="badge">🎬 TikTok</span>
                     <span class="badge">🐦 Twitter</span>
                     <span class="badge">📌 Pinterest</span>
                     <span class="badge">🎬 Vimeo</span>
@@ -217,6 +467,9 @@
         let selectedPlatform = 'youtube';
         let currentUrl = '';
         let selectedFormatId = null;
+        let selectedFormatType = null; // 'video' | 'audio' | 'image'
+        let selectedImageUrl = null;
+        let selectedImageExt = null;
 
         // Platform detection patterns
         const platformPatterns = {
@@ -233,10 +486,93 @@
             youtube: '📺',
             instagram: '📸',
             facebook: '👥',
-            tiktok: '🎵',
+            tiktok: '🎬',
             twitter: '🐦',
             pinterest: '📌'
         };
+
+        // Platform-specific SEO data
+        const platformSeo = {
+            youtube: {
+                title: 'MediDown — YouTube Video Downloader (MP4, MP3, 1080p, 4K)',
+                desc: 'Fast, free YouTube downloader. Save videos in MP4 up to 4K, extract MP3, no watermark, works on mobile and desktop.',
+                keywords: 'YouTube downloader, YouTube video downloader, download YouTube MP4, YouTube to MP3, 1080p, 4K'
+            },
+            instagram: {
+                title: 'MediDown — Instagram Downloader (Reels, Stories, Posts)',
+                desc: 'Download Instagram Reels, Stories, Posts quickly. Works without watermark. Easy on any device.',
+                keywords: 'Instagram video downloader, Reels downloader, Story downloader, download Instagram videos'
+            },
+            facebook: {
+                title: 'MediDown — Facebook Video Downloader (HD, MP4)',
+                desc: 'Download Facebook videos in MP4, HD quality. Simple, fast, and free.',
+                keywords: 'Facebook video downloader, download Facebook videos, FB video downloader'
+            },
+            tiktok: {
+                title: 'MediDown — TikTok Downloader (No Watermark)',
+                desc: 'Save TikTok videos without watermark. High-speed downloads, mobile-friendly.',
+                keywords: 'TikTok downloader, save TikTok without watermark, TikTok video downloader'
+            },
+            twitter: {
+                title: 'MediDown — Twitter/X Video Downloader (MP4, GIF)',
+                desc: 'Download videos and GIFs from Twitter/X easily. MP4, HD, mobile-friendly.',
+                keywords: 'Twitter video downloader, X video downloader, download Twitter videos'
+            },
+            pinterest: {
+                title: 'MediDown — Pinterest Downloader (Images & Videos)',
+                desc: 'Download Pinterest images and videos in high quality. Copy pin URL and save instantly.',
+                keywords: 'Pinterest downloader, download Pinterest videos, download Pinterest images'
+            }
+        };
+
+        // Ensure dynamic meta elements exist
+        function ensureMeta(name){
+            let el = document.querySelector(`meta[name="${name}"]`);
+            if (!el){
+                el = document.createElement('meta');
+                el.setAttribute('name', name);
+                document.head.appendChild(el);
+            }
+            return el;
+        }
+
+        function updateMetaForPlatform(platform){
+            const info = platformSeo[platform];
+            if (!info) return;
+            // Title
+            document.title = info.title;
+            // Description
+            const descEl = document.querySelector('meta[name="description"]') || ensureMeta('description');
+            descEl.setAttribute('content', info.desc);
+            // Keywords (merge base with platform)
+            const kwEl = document.querySelector('meta[name="keywords"]') || ensureMeta('keywords');
+            const baseKw = kwEl.getAttribute('content') || '';
+            const merged = Array.from(new Set((baseKw + ', ' + info.keywords).split(',').map(s=>s.trim()).filter(Boolean))).join(', ');
+            kwEl.setAttribute('content', merged);
+            // Open Graph
+            const ogTitle = document.querySelector('meta[property="og:title"]') || (()=>{ const m=document.createElement('meta'); m.setAttribute('property','og:title'); document.head.appendChild(m); return m; })();
+            ogTitle.setAttribute('content', info.title);
+            const ogDesc = document.querySelector('meta[property="og:description"]') || (()=>{ const m=document.createElement('meta'); m.setAttribute('property','og:description'); document.head.appendChild(m); return m; })();
+            ogDesc.setAttribute('content', info.desc);
+            // Twitter card
+            const twTitle = document.querySelector('meta[name="twitter:title"]') || ensureMeta('twitter:title');
+            twTitle.setAttribute('content', info.title);
+            const twDesc = document.querySelector('meta[name="twitter:description"]') || ensureMeta('twitter:description');
+            twDesc.setAttribute('content', info.desc);
+        }
+
+        // Initialize from hash on load
+        window.addEventListener('load', () => {
+            const hash = (location.hash||'').replace('#','');
+            if (hash && platformSeo[hash]) {
+                selectPlatform(hash);
+                // Scroll to section card if present
+                const el = document.getElementById(hash);
+                if (el) { try { el.scrollIntoView({behavior:'smooth', block:'start'}); } catch {} }
+            } else {
+                updateMetaForPlatform(selectedPlatform);
+            }
+        });
 
         function showMessage(message, type = 'info') {
             messagesDiv.innerHTML = `<div class="message ${type}">${message}</div>`;
@@ -257,9 +593,16 @@
         function selectPlatform(platform) {
             selectedPlatform = platform;
             
-            // Update platform cards
+            // Update platform cards (show only Instagram for simplified UX)
             platformCards.forEach(card => {
-                card.classList.toggle('active', card.dataset.platform === platform);
+                const isCurrent = card.dataset.platform === platform;
+                card.classList.toggle('active', isCurrent);
+                // Hide other platforms to focus on Instagram speed flow
+                if (platform === 'instagram') {
+                    if (!isCurrent) card.style.display = 'none';
+                } else {
+                    card.style.display = '';
+                }
             });
             
             // Update hints
@@ -270,6 +613,12 @@
             // Update placeholder
             const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
             mediaUrlInput.placeholder = `Paste ${platformName} URL here...`;
+
+            // Update URL hash for deep linking
+            try { if (location.hash !== `#${platform}`) history.replaceState(null, '', `#${platform}`); } catch {}
+
+            // Update SEO-related tags dynamically
+            updateMetaForPlatform(platform);
         }
 
         // Platform card click handlers
@@ -318,6 +667,7 @@
 
         // Analyze button click handler
         analyzeBtn.addEventListener('click', async () => {
+            try { if (window.gtag) gtag('event', 'analyze_click', { platform: selectedPlatform }); } catch {}
             const url = mediaUrlInput.value.trim();
             if (!url) {
                 showMessage('Please enter a media URL.', 'error');
@@ -350,19 +700,13 @@
                 
                 console.log('Analyzing URL:', url, 'Platform:', selectedPlatform);
                 
-                // This is where you'll add your backend API calls for different platforms
-                const response = await fetch(`/api/${selectedPlatform}/analyze`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                
+                // Choose API per platform
+                const MAIN_BASE = 'http://127.0.0.1:8000';
+                let response, data;
+                response = await fetch(`${MAIN_BASE}/api/v2/${selectedPlatform}/info?url=` + encodeURIComponent(url));
+                data = await response.json();
+
                 console.log('Response status:', response.status);
-                
-                console.log('Response status:', response.status);
-                
-                const data = await response.json();
-                console.log('Response data:', data);
                 console.log('Response data:', data);
                 
                 if (response.ok) {
@@ -395,15 +739,78 @@
             
             // Update media info
             document.getElementById('media-title').textContent = data.title || 'Unknown Title';
-            document.getElementById('media-thumbnail').src = data.thumbnail || '';
+            document.getElementById('media-thumbnail').src = data.thumbnail || '/static/og-default.svg';
+            document.getElementById('media-type').textContent = (data.media_type === 'image' ? 'Photo' : 'Video');
             document.getElementById('media-duration').textContent = data.duration || 'N/A';
             document.getElementById('media-views').textContent = data.views || 'N/A';
             document.getElementById('media-date').textContent = data.date || 'N/A';
             document.getElementById('media-author').textContent = data.author || 'N/A';
             
-            // Display formats and keep a map for direct URLs
-            console.log('Formats to display:', data.formats);
-            const formatsArr = data.formats || [];
+            // Cache info + formats for download step
+            // Flatten possible shapes into a single array for UI chips
+            let formatsArr = [];
+            if (Array.isArray(data.formats)) {
+                formatsArr = data.formats;
+            } else if (data.formats && typeof data.formats === 'object') {
+                const vf = Array.isArray(data.formats.video) ? data.formats.video.map(f => ({...f, type: 'video'})) : [];
+                const af = Array.isArray(data.formats.audio) ? data.formats.audio.map(f => ({...f, type: 'audio'})) : [];
+                const im = Array.isArray(data.formats.image) ? data.formats.image.map((f, idx) => ({...f, type: 'image', format_id: f.format_id ?? `img:${idx}`, url: f.url || f.direct_url || f.download_url || ''})) : [];
+                formatsArr = [...vf, ...af, ...im];
+            }
+            window.__info = data;
+            window.__formats = formatsArr;
+
+            // If photo-type: show photo preview + enable image download tab automatically
+            try {
+                const tabsEl = document.getElementById('format-tabs');
+                if (data.media_type === 'image' && tabsEl) {
+                    tabsEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    const imgTab = tabsEl.querySelector('.tab-btn[data-tab="image"]');
+                    if (imgTab) imgTab.classList.add('active');
+                }
+            } catch {}
+
+            // Render Instant panel (if provided by API)
+            try {
+                const instantPanel = document.getElementById('instant-panel');
+                const instantLinks = document.getElementById('instant-links');
+                const instantBestBtn = document.getElementById('instant-best-btn');
+                if (instantPanel && instantLinks && instantBestBtn) {
+                    instantLinks.innerHTML = '';
+                    const progressive = Array.isArray(data.progressive_formats) ? data.progressive_formats.slice() : [];
+                    if (progressive.length > 0) {
+                        instantPanel.classList.remove('hidden');
+                        // build instant buttons
+                        progressive.forEach(fmt => {
+                            const sizeMB = fmt.filesize ? (fmt.filesize/1048576).toFixed(1) : null;
+                            const a = document.createElement('a');
+                            a.href = fmt.direct_url;
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.download = `${(data.title||'video')}_${fmt.quality}.${fmt.ext||'mp4'}`;
+                            a.className = 'quality-chip';
+                            a.textContent = `${fmt.quality}${sizeMB? ' • '+sizeMB+' MB':''}`;
+                            instantLinks.appendChild(a);
+                        });
+                        // Best quality action
+                        instantBestBtn.onclick = () => {
+                            const best = progressive[0];
+                            if (best && best.direct_url) {
+                                const a = document.createElement('a');
+                                a.href = best.direct_url;
+                                a.download = `${(data.title||'video')}_${best.quality}.${best.ext||'mp4'}`;
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                            }
+                        };
+                    } else {
+                        instantPanel.classList.add('hidden');
+                    }
+                }
+            } catch (e) { console.warn('Instant panel render failed', e); }
+            
+            // Keep a map for any provided direct URLs (optional)
             const directUrlByFormat = {};
             for (const f of formatsArr) {
                 if (f && f.is_progressive && f.direct_url) {
@@ -423,39 +830,183 @@
             const list = document.getElementById('formats');
             list.innerHTML = '';
             selectedFormatId = 'best';
-            
-            // Add a default "Best" option
-            const bestBtn = document.createElement('button');
-            bestBtn.type = 'button';
-            bestBtn.className = 'quality-chip active';
-            bestBtn.textContent = 'Best';
-            bestBtn.dataset.formatId = 'best';
-            list.appendChild(bestBtn);
-            
-            // Build quality chips from available formats
-            const videoFormats = (formats || [])
-                .filter(f => (f.vcodec && f.vcodec !== 'none') || f.height)
-                .sort((a, b) => (b.height || 0) - (a.height || 0));
-            
-            for (const f of videoFormats) {
-                const label = `${f.quality || (f.height? f.height+"p" : 'Video')} ${f.ext ? f.ext.toUpperCase() : ''}`.trim();
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'quality-chip';
-                chip.textContent = label;
-                chip.title = `${f.resolution || ''} ${f.fps? f.fps+"fps" : ''} ${f.filesize_mb? '('+f.filesize_mb.toFixed? f.filesize_mb.toFixed(1):f.filesize_mb+' MB)' : ''}`.trim();
-                chip.dataset.formatId = f.format_id;
-                list.appendChild(chip);
+
+            const tabsEl = document.getElementById('format-tabs');
+            const activeTab = tabsEl?.querySelector('.tab-btn.active')?.dataset.tab || 'all';
+            const wantVideo = activeTab === 'all' || activeTab === 'video';
+            const wantAudio = activeTab === 'all' || activeTab === 'audio';
+            const wantImage = activeTab === 'all' || activeTab === 'image';
+            // Force-only video for Instagram for speed and video+audio
+            const isInstagram = selectedPlatform === 'instagram';
+
+            // Build quality chips for video (with de-duplication)
+            const rawVideo = (formats || [])
+                .filter(f => (f.type === 'video') || ((f.ext || '').toLowerCase() === 'mp4' && ((f.vcodec && f.vcodec !== 'none') || f.height)));
+
+            // De-duplicate by height (prefer higher tbr/fps/filesize_mb)
+            const bestByHeight = {};
+            for (const f of rawVideo) {
+                const h = parseInt(f.height || 0, 10) || 0;
+                if (h <= 0) continue;
+                const cur = bestByHeight[h];
+                if (!cur) { bestByHeight[h] = f; continue; }
+                const curTbr = cur.tbr || 0, newTbr = f.tbr || 0;
+                const curFps = cur.fps || 0, newFps = f.fps || 0;
+                const curSz = (typeof cur.filesize_mb === 'number' ? cur.filesize_mb : (cur.filesize || cur.filesize_approx || 0)) || 0;
+                const newSz = (typeof f.filesize_mb === 'number' ? f.filesize_mb : (f.filesize || f.filesize_approx || 0)) || 0;
+                if (newTbr > curTbr || newFps > curFps || newSz > curSz) bestByHeight[h] = f;
+            }
+            const videoFormats = Object.values(bestByHeight).sort((a, b) => (b.height || 0) - (a.height || 0));
+
+            // Precompute progressive (video+audio) for Instant and Fast
+            const progressive = videoFormats.filter(f => (f.is_progressive || (f.acodec && f.acodec !== 'none')));
+            const instantBest = progressive[0] || null; // highest resolution with audio
+            const fastBest = progressive.find(f => (f.height||0) <= 720) || progressive[progressive.length-1] || null; // <=720p if possible
+
+            // Add "Instant" and "Fast" buttons first when Instagram
+            if (isInstagram && wantVideo) {
+                if (instantBest) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quality-chip active';
+                    btn.textContent = `🚀 Instant • ${(instantBest.quality || (instantBest.height? instantBest.height+'p':'MP4'))}`;
+                    btn.dataset.formatId = instantBest.format_id || 'best';
+                    btn.dataset.type = 'video';
+                    btn.dataset.instant = '1';
+                    btn.dataset.hasAudio = '1';
+                    list.appendChild(btn);
+                }
+                if (fastBest && (!instantBest || String(fastBest.format_id) !== String(instantBest.format_id))) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quality-chip';
+                    btn.textContent = `⚡ Fast • ${(fastBest.quality || (fastBest.height? fastBest.height+'p':'MP4'))}`;
+                    btn.dataset.formatId = fastBest.format_id || 'best';
+                    btn.dataset.type = 'video';
+                    btn.dataset.instant = '1';
+                    btn.dataset.hasAudio = '1';
+                    list.appendChild(btn);
+                }
+            } else if (wantVideo) {
+                // Default Best chip for other platforms
+                const bestBtn = document.createElement('button');
+                bestBtn.type = 'button';
+                bestBtn.className = 'quality-chip active';
+                bestBtn.textContent = 'Best';
+                bestBtn.dataset.formatId = 'best';
+                bestBtn.dataset.type = 'video';
+                list.appendChild(bestBtn);
+            }
+
+            // Render remaining specific resolutions
+            if (wantVideo) {
+                for (const f of videoFormats) {
+                    const base = `${f.quality || (f.height? f.height+"p" : 'Video')} MP4`.trim();
+                    const h = parseInt(f.height || 0, 10) || 0;
+                    const hasAudio = !!(f.is_progressive || (f.acodec && f.acodec !== 'none'));
+                    const audioSymbol = hasAudio ? '🎵' : '🔇';
+                    const isInstant = hasAudio && h > 0 && h <= 1080; // allow instant up to 1080 if direct stream
+                    const label = `${base} ${audioSymbol}` + (isInstant ? ' • Instant' : '');
+
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'quality-chip';
+                    chip.textContent = label;
+                    chip.title = `${f.resolution || ''} ${f.fps? f.fps+"fps" : ''} ${f.filesize_mb? '('+ (typeof f.filesize_mb === 'number' ? f.filesize_mb.toFixed(1) : f.filesize_mb) +' MB)' : ''}`.trim();
+                    chip.dataset.formatId = f.format_id;
+                    chip.dataset.type = 'video';
+                    chip.dataset.hasAudio = hasAudio ? '1' : '0';
+                    if (isInstant) chip.dataset.instant = '1';
+                    list.appendChild(chip);
+                }
+            }
+
+            // Audio (explicit MP3)
+            if (wantAudio) {
+                const audioFormats = (formats || []).filter(f => f.type === 'audio' || (String(f.ext||'').toLowerCase() === 'mp3') || String(f.format_id||'').startsWith('mp3_'));
+                if (audioFormats.length) {
+                    const sep = document.createElement('div');
+                    sep.style.margin = '8px 0 4px';
+                    sep.style.opacity = '0.75';
+                    sep.textContent = 'Audio (MP3)';
+                    list.appendChild(sep);
+                    for (const f of audioFormats) {
+                        const label = `${f.quality || (f.tbr? f.tbr+'kbps' : 'MP3')}`.trim();
+                        const chip = document.createElement('button');
+                        chip.type = 'button';
+                        chip.className = 'quality-chip';
+                        chip.textContent = label;
+                        chip.title = `${f.tbr? f.tbr+'kbps' : 'MP3'}`;
+                        chip.dataset.formatId = f.format_id || (f.tbr? 'mp3_'+f.tbr : 'mp3_192');
+                        chip.dataset.type = 'audio';
+                        list.appendChild(chip);
+                    }
+                }
+            }
+
+            // Images (for photo posts)
+            if (wantImage) {
+                const imageFormats = (formats || [])
+                    .filter(f => f.type === 'image' || ['jpg','jpeg','png','webp','gif'].includes(String(f.ext||'').toLowerCase()))
+                    .sort((a, b) => ((b.width||0)*(b.height||0)) - ((a.width||0)*(a.height||0)));
+                if (imageFormats.length) {
+                    const sep2 = document.createElement('div');
+                    sep2.style.margin = '8px 0 4px';
+                    sep2.style.opacity = '0.75';
+                    sep2.textContent = 'Images';
+                    list.appendChild(sep2);
+                    for (const f of imageFormats) {
+                        const w = f.width || 0, h = f.height || 0;
+                        const label = `📷 Image ${w && h ? `${w}x${h}` : ''} ${(f.ext||'').toUpperCase()}`.trim();
+                        const chip = document.createElement('button');
+                        chip.type = 'button';
+                        chip.className = 'quality-chip';
+                        chip.textContent = label;
+                        chip.title = `${(f.filesize_mb? '('+ (typeof f.filesize_mb === 'number' ? f.filesize_mb.toFixed(1) : f.filesize_mb) +' MB)' : '')}`.trim();
+                        chip.dataset.formatId = f.format_id || '';
+                        chip.dataset.type = 'image';
+                        chip.dataset.url = f.url || f.direct_url || '';
+                        chip.dataset.ext = (f.ext || 'jpg').toLowerCase();
+                        list.appendChild(chip);
+                    }
+                }
             }
             
             // Selection behavior
-            list.addEventListener('click', (e) => {
-                const btn = e.target.closest('button.quality-chip');
-                if (!btn) return;
-                list.querySelectorAll('button.quality-chip').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedFormatId = btn.dataset.formatId || 'best';
-            }, { once: true });
+            if (!list.__wired) {
+                list.addEventListener('click', (e) => {
+                    const btn = e.target.closest('button.quality-chip');
+                    if (!btn) return;
+                    list.querySelectorAll('button.quality-chip').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedFormatId = btn.dataset.formatId || 'best';
+                    selectedFormatType = btn.dataset.type || null;
+                    if (selectedFormatType === 'image') {
+                        selectedImageUrl = btn.dataset.url || null;
+                        selectedImageExt = btn.dataset.ext || 'jpg';
+                    } else {
+                        selectedImageUrl = null;
+                        selectedImageExt = null;
+                    }
+                });
+                list.__wired = true;
+            }
+
+            // Tabs interactions
+            if (tabsEl && !tabsEl.__wired) {
+                tabsEl.addEventListener('click', (e) => {
+                    const t = e.target.closest('.tab-btn');
+                    if (!t) return;
+                    tabsEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    t.classList.add('active');
+                    selectedFormatId = 'best';
+                    selectedFormatType = null;
+                    selectedImageUrl = null;
+                    selectedImageExt = null;
+                    displayFormats(window.__formats || []);
+                });
+                tabsEl.__wired = true;
+            }
         }
 
         function simulateProgress(type) {
@@ -504,203 +1055,205 @@
 
         // Download button functionality
         document.getElementById('download-btn').addEventListener('click', async () => {
-            if (!selectedFormatId) {
-                selectedFormatId = 'best'; // Fallback to best quality
+            try { if (window.gtag) gtag('event', 'download_start', { platform: selectedPlatform, format_id: selectedFormatId || 'best' }); } catch {}
+            if (!selectedFormatId) selectedFormatId = 'best';
+
+            // Helper to sanitize filename
+            function safeName(s){
+                return (s||'video')
+                    .replace(/[\\/:*?"<>|]+/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim()
+                    .slice(0, 120);
             }
 
-            const downloadBtn = document.getElementById('download-btn');
-            
-            // Add loading state
-            downloadBtn.classList.add('btn-loading');
-            downloadBtn.disabled = true;
-            
-            // If a direct URL is available for the selected format, trigger direct browser download first
-            const directMap = window.__directUrlByFormat || {};
-            const directUrl = directMap[selectedFormatId];
-            if (directUrl) {
+            const formats = (window.__formats || []);
+            const info = (window.__info || {});
+            const title = safeName(info.title || 'video');
+
+            // Image formats: direct URL if available, else Social API passthrough
+            if (selectedFormatType === 'image') {
+                const chip = document.querySelector('button.quality-chip.active');
+                const imgUrl = (chip && chip.dataset.url) ? chip.dataset.url : selectedImageUrl;
+                if (imgUrl) {
+                    // Open image directly in same tab
+                    window.location.href = imgUrl;
+                    return;
+                }
+                const imgExt = (chip && chip.dataset.ext) ? chip.dataset.ext : (selectedImageExt || 'jpg');
+                const imgFormatId = (chip && chip.dataset.formatId) ? chip.dataset.formatId : 'img:0';
+                const q = new URLSearchParams({
+                    url: currentUrl,
+                    format_id: imgFormatId,
+                    filename: `${title}.${imgExt}`
+                }).toString();
+                window.location.href = `${SOCIAL_BASE || ''}/${selectedPlatform}/download?${q}`;
+                return;
+            }
+
+            // Audio-only (MP3) direct route if provided by backend; else merge endpoint
+            if (selectedFormatType === 'audio') {
+                const chosen = (window.__formats||[]).find(f => String(f.format_id) === String(selectedFormatId));
+                if (chosen && chosen.direct_url) {
+                    window.location.href = chosen.direct_url;
+                    return;
+                }
+                // Fallback: ask backend to extract audio as mp3
+                const br = parseInt(String((chosen && chosen.tbr) || '').replace(/\D/g,'')) || 192;
+                return startMerge({ url: currentUrl, mp3_bitrate: br });
+            }
+
+            // Resolve selected format (or best)
+            const videoFormats = (formats || [])
+                .filter(f => (f.type === 'video') || ((String(f.ext||'').toLowerCase()==='mp4') && ((f.vcodec && f.vcodec !== 'none') || f.height)))
+                .sort((a,b)=> (b.height||0)-(a.height||0));
+            const audioFormats = (formats || []).filter(f => (f.type === 'audio') || String(f.ext||'').toLowerCase()==='mp3');
+
+            let chosen = null;
+            if (selectedFormatId === 'best') chosen = videoFormats[0] || null; else chosen = formats.find(f=> String(f.format_id)===String(selectedFormatId)) || null;
+            if (!chosen) { showMessage('No suitable format selected.', 'error'); return; }
+
+            // MP3 → server-side extract via /api/merge (mp3_bitrate)
+            if (String(chosen.format_id).startsWith('mp3_')) {
+                const br = parseInt(String(chosen.tbr||'').replace(/\D/g,'')) || 192;
+                return startMerge({ url: currentUrl, mp3_bitrate: br });
+            }
+
+            // ≤720p and muxed (has audio) → instant stream with preview; else merge server-side
+            const height = chosen.height || 0;
+            const hasAudio = (chosen.acodec && chosen.acodec !== 'none');
+
+            // Open preview in a new tab using /api/stream for progressive formats
+            function openInstantPreview(url, fmtId, filename){
+                // 1) Preview inline (no filename -> inline stream in new tab)
+                const previewUrl = `${MAIN_BASE}/api/stream?` + new URLSearchParams({ url, format_id: String(fmtId) }).toString();
+                const w = window.open(previewUrl, '_blank');
+                // 2) Background download with a clean filename (triggers browser save to Downloads)
                 try {
+                    const dlUrl = `${MAIN_BASE}/api/stream?` + new URLSearchParams({ url, format_id: String(fmtId), filename: filename || `${title}.mp4` }).toString();
                     const a = document.createElement('a');
-                    a.href = directUrl;
-                    a.download = '';
-                    a.rel = 'noopener';
+                    a.href = dlUrl;
+                    a.download = filename || `${title}.mp4`;
+                    a.style.display = 'none';
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
-                    // Also show the ready section with a link for convenience
-                    document.getElementById('download-ready-container').classList.remove('hidden');
-                    const dl = document.getElementById('download-link');
-                    if (dl) dl.href = directUrl;
-                    // No backend task needed
-                    downloadBtn.classList.remove('btn-loading');
-                    downloadBtn.disabled = false;
-                    return;
-                } catch (e) {
-                    console.warn('Direct URL download failed, falling back to backend:', e);
-                }
+                } catch {}
+                return w;
             }
 
-            // Hide media info and show download progress
-            document.getElementById('media-info').classList.add('hidden');
-            document.getElementById('download-progress-container').classList.remove('hidden');
-            
-            // Simulate download progress
-            const progressInterval = simulateProgress('download');
-            
-            try {
-                // Call download API
-                const response = await fetch(`/api/${selectedPlatform}/download`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        url: currentUrl, 
-                        format_id: selectedFormatId 
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Start realtime progress via SSE, fallback to polling
+            // Prefer Instant/Fast for Instagram (direct, no server) when video has audio
+            if (hasAudio && (selectedPlatform === 'instagram')) {
+                const pretty = `${title} ${chosen.quality?'- '+chosen.quality:''}.mp4`;
+                openInstantPreview(currentUrl, chosen.format_id||'best', pretty);
+                return;
+            }
+            // Generic: if video has audio and marked instant, still use instant
+            if (hasAudio) {
+                const pretty = `${title} ${chosen.quality?'- '+chosen.quality:''}.mp4`;
+                openInstantPreview(currentUrl, chosen.format_id||'best', pretty);
+                return;
+            }
+            // Video-only → merge server-side (auto bestaudio)
+            return startMerge({ url: currentUrl, video_format_id: String(chosen.format_id) });
+
+            // Background download via /api/v2/{platform}/download and poll /api/v2/task/{task_id}
+            async function startMerge(body){
+                const downloadBtn = document.getElementById('download-btn');
+                downloadBtn.classList.add('btn-loading');
+                downloadBtn.disabled = true;
+                document.getElementById('media-info').classList.add('hidden');
+                document.getElementById('download-progress-container').classList.remove('hidden');
+                const progressInterval = simulateProgress('download');
+                try {
+                    // Build v2 request body
+                    const req = { url: currentUrl };
+                    if (body && body.video_format_id) req.format_id = String(body.video_format_id);
+                    if (body && body.mp3_bitrate) req.format_id = `mp3_${parseInt(body.mp3_bitrate, 10) || 192}`;
+
+                    const resp = await fetch(`${MAIN_BASE}/api/v2/${selectedPlatform}/download`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(req)
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok || !data.task_id){ showMessage(data.error||'Failed to start download.', 'error'); return; }
                     const taskId = data.task_id;
                     const progressBar = document.getElementById('download-progress');
                     const progressText = document.getElementById('download-progress-text');
                     const etaEl = document.getElementById('download-eta');
 
-                    let cleanup = () => {};
-
-                    function handleUpdate(t) {
-                        if (!t) return;
-                        if (t.status === 'initializing' || t.status === 'preparing') {
-                            progressText.textContent = t.progress || 'Preparing...';
-                        } else if (t.status === 'downloading') {
-                            const value = parseFloat(String(t.progress || '0').replace('%','')) || 0;
-                            const clamped = Math.min(Math.max(value, 0), 100);
-                            progressBar.style.width = `${clamped.toFixed(1)}%`;
-                            progressText.textContent = t.progress || `Downloading... ${clamped.toFixed(1)}%`;
-                            if (etaEl && t.eta_seconds) {
-                                const m = Math.floor(t.eta_seconds/60), s = t.eta_seconds%60;
-                                etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
-                            }
-                        } else if (t.status === 'processing') {
-                            progressBar.style.width = '100%';
-                            progressText.textContent = 'Processing...';
-                        } else if (t.status === 'finished' && t.filename) {
-                            cleanup();
-                            // Hide progress and show download link
-                            document.getElementById('download-progress-container').classList.add('hidden');
-                            document.getElementById('download-ready-container').classList.remove('hidden');
-                            // Set link
-                            const downloadLink = document.getElementById('download-link');
-                            const encoded = encodeURIComponent(t.filename);
-                            downloadLink.href = `/download/${encoded}`;
-                            downloadLink.download = t.filename;
-                            // Auto-trigger download
-                            try {
-                                const a = document.createElement('a');
-                                a.href = downloadLink.href;
-                                a.download = t.filename;
-                                document.body.appendChild(a);
-                                a.click();
-                                a.remove();
-                            } catch {}
-                        } else if (t.status === 'error') {
-                            cleanup();
-                            showMessage(t.error || 'Download failed.', 'error');
-                            const retryC = document.getElementById('retry-container');
-                            const retryBtn = document.getElementById('retry-btn');
-                            if (retryC && retryBtn) {
-                                retryC.classList.remove('hidden');
-                                retryBtn.onclick = async function () {
-                                    retryC.classList.add('hidden');
-                                    // Re-trigger same download request
-                                    document.getElementById('download-progress-container').classList.remove('hidden');
-                                    // Simulate progress again quickly
-                                    simulateProgress('download');
-                                    try {
-                                        const resp = await fetch(`/api/${selectedPlatform}/download`, {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ url: currentUrl, format_id: selectedFormatId || 'best' })
-                                        });
-                                        const d2 = await resp.json();
-                                        if (resp.ok && d2.task_id) {
-                                            // Start new tracking flow
-                                            const newTask = d2.task_id;
-                                            // Restart SSE/polling
-                                            function restartHandle(t2){ handleUpdate(t2); }
-                                            if ('EventSource' in window) {
-                                                try {
-                                                    const es2 = new EventSource(`/api/progress-stream/${newTask}`);
-                                                    es2.onmessage = (evt) => { try { restartHandle(JSON.parse(evt.data)); } catch {} };
-                                                    es2.onerror = () => { try { es2.close(); } catch {}; startPolling(); };
-                                                    cleanup = () => { try { es2.close(); } catch {} };
-                                                } catch (e) { startPolling(); }
-                                            } else { startPolling(); }
-                                        } else {
-                                            showMessage(d2.error || 'Retry failed to start.', 'error');
-                                        }
-                                    } catch (err) {
-                                        showMessage('Retry failed. Please try again.', 'error');
-                                    }
-                                };
-                            }
-                            // Keep progress container visible so Retry is shown
-                            document.getElementById('download-progress-container').classList.remove('hidden');
-                            document.getElementById('media-info').classList.add('hidden');
-                        }
-                    }
-
-                    function startPolling() {
-                        const poll = setInterval(async () => {
-                            try {
-                                const r = await fetch(`/api/progress/${taskId}`);
-                                const t = await r.json();
-                                if (!r.ok) return;
-                                handleUpdate(t);
-                            } catch (e) {
-                                console.warn('Polling error', e);
-                            }
-                        }, 1000);
-                        cleanup = () => clearInterval(poll);
-                    }
-
-                    if ('EventSource' in window) {
+                    const poll = setInterval(async () => {
                         try {
-                            const es = new EventSource(`/api/progress-stream/${taskId}`);
-                            es.onmessage = (evt) => {
-                                try { handleUpdate(JSON.parse(evt.data)); } catch {}
-                            };
-                            es.onerror = () => {
-                                // Fallback to polling on error
-                                try { es.close(); } catch {}
-                                startPolling();
-                            };
-                            cleanup = () => { try { es.close(); } catch {} };
-                        } catch (e) {
-                            startPolling();
-                        }
-                    } else {
-                        startPolling();
-                    }
-                } else {
-                    showMessage(data.error || 'Download failed.', 'error');
-                    // If 403, prompt cookies upload helper
-                    if (response.status === 403) {
-                        const helper = document.getElementById('cookies-helper');
-                        if (helper) helper.classList.remove('hidden');
-                    }
+                            const r = await fetch(`${MAIN_BASE}/api/v2/task/${taskId}`);
+                            const t = await r.json();
+                            if (!r.ok || !t) return;
+                            const state = t.state || '';
+                            const status = t.status || '';
+                            const percent = (typeof t.percent === 'number') ? t.percent : null;
+
+                            if (percent != null){
+                                const clamped = Math.min(Math.max(percent,0),100);
+                                progressBar.style.width = `${clamped.toFixed(1)}%`;
+                                progressText.textContent = `Downloading... ${clamped.toFixed(1)}%`;
+                            } else if (status === 'downloading'){
+                                const value = parseFloat(String(t.progress||'0').replace('%',''))||0;
+                                const clamped = Math.min(Math.max(value,0),100);
+                                progressBar.style.width = `${clamped.toFixed(1)}%`;
+                                progressText.textContent = t.progress || `Downloading... ${clamped.toFixed(1)}%`;
+                                if (etaEl && t.eta){
+                                    const m = Math.floor(t.eta/60), s = t.eta%60;
+                                    etaEl.textContent = `⏱️ Estimated time: ~${m>0?`${m}m `:''}${s}s`;
+                                }
+                            } else if (status === 'processing' || state === 'SUCCESS'){
+                                progressBar.style.width = '100%';
+                                progressText.textContent = state === 'SUCCESS' ? 'Finished' : 'Processing...';
+                            }
+
+                            const done = (state === 'SUCCESS') || (status === 'finished') || (t.result && t.result.download_url);
+                            if (done){
+                                clearInterval(poll);
+                                document.getElementById('download-progress-container').classList.add('hidden');
+                                document.getElementById('download-ready-container').classList.remove('hidden');
+                                const downloadLink = document.getElementById('download-link');
+                                let filename = (t.result && t.result.filename) || t.filename || '';
+                                let href = (t.result && t.result.download_url) || (filename ? `/download/${encodeURIComponent(filename)}` : null);
+                                if (!href && t.path){
+                                    const name = t.path.split('/').pop().split('\\').pop();
+                                    href = `/download/${encodeURIComponent(name)}`;
+                                    filename = name;
+                                }
+                                if (href){
+                                    downloadLink.href = href;
+                                    if (filename) downloadLink.download = filename;
+                                    try { if (window.gtag) gtag('event', 'download_ready', { platform: selectedPlatform, format_id: selectedFormatId || 'best' }); } catch {}
+                                    try { const a=document.createElement('a'); a.href=href; if (filename) a.download=filename; document.body.appendChild(a); a.click(); a.remove(); } catch{}
+                                } else {
+                                    showMessage('Download finished but file link is unavailable.', 'error');
+                                }
+                            } else if (state === 'FAILURE' || status === 'error') {
+                                clearInterval(poll);
+                                showMessage((t.detail && t.detail.error) || t.error || 'Download failed.', 'error');
+                                const retryC = document.getElementById('retry-container');
+                                const retryBtn = document.getElementById('retry-btn');
+                                if (retryC && retryBtn){
+                                    retryC.classList.remove('hidden');
+                                    retryBtn.onclick = () => { document.getElementById('download-progress-container').classList.add('hidden'); document.getElementById('media-info').classList.remove('hidden'); };
+                                }
+                            }
+                        } catch(err) { console.warn('Polling error', err); }
+                    }, 1000);
+                } catch (error) {
+                    console.error('Download error:', error);
+                    showMessage('An error occurred during download.', 'error');
                     document.getElementById('download-progress-container').classList.add('hidden');
                     document.getElementById('media-info').classList.remove('hidden');
+                } finally {
+                    clearInterval(progressInterval);
+                    const downloadBtn = document.getElementById('download-btn');
+                    downloadBtn.classList.remove('btn-loading');
+                    downloadBtn.disabled = false;
                 }
-            } catch (error) {
-                console.error('Download error:', error);
-                showMessage('An error occurred during download.', 'error');
-                document.getElementById('download-progress-container').classList.add('hidden');
-                document.getElementById('media-info').classList.remove('hidden');
-            } finally {
-                clearInterval(progressInterval);
-                downloadBtn.classList.remove('btn-loading');
-                downloadBtn.disabled = false;
             }
         });
 
@@ -741,5 +1294,133 @@
             mediaUrlInput.focus();
         });
     </script>
+
+    <script>
+      // Basic TCF v2.2 stub (reads __tcfapi if a CMP is present)
+      (function(){
+        window.__tcfConsent = { tcString: null, purposes: {}, vendors: {} };
+        function readTCF(){
+          try {
+            if (typeof __tcfapi !== 'function') return;
+            __tcfapi('getTCData', 2, function(tcData, success){
+              if (!success || !tcData) return;
+              window.__tcfConsent.tcString = tcData.tcString;
+              window.__tcfConsent.purposes = tcData.purpose && tcData.purpose.consents || {};
+              window.__tcfConsent.vendors = tcData.vendor && tcData.vendor.consents || {};
+            });
+          } catch {}
+        }
+        if (document.readyState !== 'loading') readTCF(); else window.addEventListener('DOMContentLoaded', readTCF);
+        setTimeout(readTCF, 2000);
+      })();
+    </script>
+
+    <script>
+      // Consent logic + deferred AdSense load + optional anchors + Consent Mode
+      (function(){
+        const banner = document.getElementById('consent-banner');
+        const acceptBtn = document.getElementById('consent-accept');
+        const declineBtn = document.getElementById('consent-decline');
+
+        function hasConsent(){
+          return localStorage.getItem('consent_marketing') === 'granted';
+        }
+        function setConsent(val){
+          localStorage.setItem('consent_marketing', val);
+        }
+
+        function enableAds(){
+          if (window.__adsConsentGranted) return;
+          window.__adsConsentGranted = true;
+
+          // Update Google Consent Mode to granted
+          try {
+            gtag('consent', 'update', {
+              'ad_storage': 'granted',
+              'analytics_storage': 'granted',
+              'ad_user_data': 'granted',
+              'ad_personalization': 'granted'
+            });
+          } catch {}
+
+          if (typeof loadAdsenseScript === 'function') loadAdsenseScript();
+          try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch {}
+
+          // Optional: TOP anchor unit if enabled and slot provided
+          {% if adsense_enabled and adsense_client and adsense_top_sticky_enabled and adsense_top_anchor_slot %}
+          try {
+            const topBar = document.createElement('div');
+            topBar.style.cssText = 'position:fixed;left:0;right:0;top:0;background:#fff;border-bottom:1px solid #ddd;z-index:9998;padding:6px 0;';
+            topBar.innerHTML = `
+              <div style=\"max-width:1000px;margin:0 auto\">
+                <ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"{{ adsense_client }}\" data-ad-slot=\"{{ adsense_top_anchor_slot }}\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>
+              </div>`;
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.setAttribute('aria-label','Close');
+            closeBtn.style.cssText = 'position:absolute;right:8px;top:8px;background:#eee;border:1px solid #ccc;border-radius:4px;padding:2px 6px;cursor:pointer;';
+            closeBtn.onclick = ()=>{ document.body.style.paddingTop = ''; topBar.remove(); };
+            topBar.appendChild(closeBtn);
+            document.body.appendChild(topBar);
+            document.body.style.paddingTop = '64px';
+            try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch {}
+            // Auto-dismiss after 20s
+            setTimeout(()=>{ try{ closeBtn.click(); } catch{} }, 20000);
+          } catch {}
+          {% endif %}
+
+          // Optional: BOTTOM anchor unit if enabled and slot provided
+          {% if adsense_enabled and adsense_client and adsense_sticky_enabled and adsense_anchor_slot %}
+          try {
+            const bar = document.createElement('div');
+            bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;z-index:9998;padding:6px 0;';
+            bar.innerHTML = `
+              <div style=\"max-width:1000px;margin:0 auto\">
+                <ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"{{ adsense_client }}\" data-ad-slot=\"{{ adsense_anchor_slot }}\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>
+              </div>`;
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.setAttribute('aria-label','Close');
+            closeBtn.style.cssText = 'position:absolute;right:8px;top:8px;background:#eee;border:1px solid #ccc;border-radius:4px;padding:2px 6px;cursor:pointer;';
+            closeBtn.onclick = ()=>{ document.body.style.paddingBottom = ''; bar.remove(); };
+            bar.appendChild(closeBtn);
+            document.body.appendChild(bar);
+            document.body.style.paddingBottom = '64px';
+            try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch {}
+            // Auto-dismiss after 20s
+            setTimeout(()=>{ try{ closeBtn.click(); } catch{} }, 20000);
+          } catch {}
+          {% endif %}
+        }
+
+        // Show banner if no decision yet
+        if (!hasConsent()) {
+          banner.style.display = 'block';
+        } else if (hasConsent()) {
+          enableAds();
+        }
+
+        if (acceptBtn) acceptBtn.onclick = function(){
+          setConsent('granted');
+          banner.style.display = 'none';
+          enableAds();
+        };
+        if (declineBtn) declineBtn.onclick = function(){
+          setConsent('denied');
+          banner.style.display = 'none';
+        };
+      })();
+    </script>
+  <footer style="margin-top:24px; padding:16px 0; border-top:1px solid #e5e7eb; color:#6b7280; font-size:14px;">
+    <div style="max-width:1000px; margin:0 auto; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between;">
+      <div>© <span id="year"></span> MediDown.com — Universal Media Downloader</div>
+      <nav style="display:flex; gap:12px;">
+        <a href="/privacy" style="color:inherit; text-decoration:none;">Privacy Policy</a>
+        <a href="/terms" style="color:inherit; text-decoration:none;">Terms</a>
+        <a href="https://medidown.com/" style="color:inherit; text-decoration:none;">medidown.com</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

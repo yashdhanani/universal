@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Minimal wordmark + icon for medidown.com on white background -->
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="200" viewBox="0 0 720 200" role="img" aria-labelledby="title desc">
+  <title id="title">medidown.com logo</title>
+  <desc id="desc">Bold dark-blue wordmark 'medidown.com' with a small gradient icon combining a play button and a download arrow on a white background.</desc>
+  <defs>
+    <!-- Smooth blue → purple gradient for the icon -->
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <!-- Dark blue for the wordmark -->
+    <style>
+      .wordmark{ fill:#0f172a; font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; }
+    </style>
+  </defs>
+
+  <!-- Background (pure white) -->
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- Layout: wordmark left, icon right -->
+  <!-- Wordmark: bold, highly legible -->
+  <g transform="translate(24,132)">
+    <text class="wordmark" font-size="64" letter-spacing="0.5">medidown.com</text>
+  </g>
+
+  <!-- Icon to the right: play + download arrow in a rounded square -->
+  <g transform="translate(600,60)">
+    <!-- Rounded container for subtle integration (optional outline removed for clean look) -->
+    <rect x="-4" y="-4" width="84" height="84" rx="16" ry="16" fill="none"/>
+
+    <!-- Play button (triangle) -->
+    <path d="M16,10 L16,66 L58,38 Z" fill="url(#g)"/>
+
+    <!-- Download arrow (centered), using the same gradient for cohesion -->
+    <!-- Shaft -->
+    <rect x="34" y="18" width="6" height="28" rx="3" fill="url(#g)"/>
+    <!-- Arrow head -->
+    <path d="M28,44 L37,56 L46,44 Z" fill="url(#g)"/>
+    <!-- Baseline (subtle) -->
+    <rect x="24" y="62" width="40" height="4" rx="2" fill="url(#g)" opacity="0.85"/>
+  </g>
+</svg>

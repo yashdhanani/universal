@@ -1,0 +1,379 @@
+{
+  "base": "http://127.0.0.1:8004/api/info",
+  "generated_at": 1757149602,
+  "totals": {
+    "PASS": 4,
+    "FAIL": 37
+  },
+  "results": [
+    {
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90786
+    },
+    {
+      "url": "https://www.youtube.com/shorts/aqz-KE-bpKQ",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90801
+    },
+    {
+      "url": "https://www.youtube.com/playlist?list=PLMC9KNkIncKtsacKpgMb0CVqT5pXrWpKf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": 502,
+      "title": null,
+      "error": "{\"detail\":\"Failed to fetch info\"}",
+      "duration_ms": 34799
+    },
+    {
+      "url": "https://www.youtube.com/@NASA",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90799
+    },
+    {
+      "url": "https://www.instagram.com/p/C8QltYbIh2P/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 26734
+    },
+    {
+      "url": "https://www.instagram.com/p/CWg8ZBxD5cf/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 23559
+    },
+    {
+      "url": "https://www.instagram.com/p/CFkFyr0HT5G/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 16116
+    },
+    {
+      "url": "https://www.instagram.com/reel/C9cP8s1yR3R/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 47809
+    },
+    {
+      "url": "https://www.instagram.com/tv/CFnU1OcJk5L/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 45607
+    },
+    {
+      "url": "https://www.instagram.com/stories/highlights/17895511311129510/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 59357
+    },
+    {
+      "url": "https://www.instagram.com/p/CHuJ3FwJp4V/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 70838
+    },
+    {
+      "url": "https://www.instagram.com/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 73459
+    },
+    {
+      "url": "https://www.instagram.com/explore/locations/213385402/new-york-new-york/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 75850
+    },
+    {
+      "url": "https://www.instagram.com/explore/tags/sunset/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Instagram may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 68785
+    },
+    {
+      "url": "https://www.facebook.com/watch/?v=10153231379946729",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Facebook may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 75832
+    },
+    {
+      "url": "https://www.facebook.com/20531316728/posts/10154009990506729/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Facebook may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 64822
+    },
+    {
+      "url": "https://www.facebook.com/media/set/?set=a.10100480647661891&type=3",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Facebook may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 80144
+    },
+    {
+      "url": "https://www.facebook.com/nasa",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Facebook may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 75999
+    },
+    {
+      "url": "https://www.tiktok.com/@scout2015/video/6718335390845095173",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180782
+    },
+    {
+      "url": "https://www.tiktok.com/@charlidamelio",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180777
+    },
+    {
+      "url": "https://www.tiktok.com/tag/fyp",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180775
+    },
+    {
+      "url": "https://twitter.com/nasa/status/1410624005669169154",
+      "label": "restricted",
+      "status": "PASS",
+      "http_status": 200,
+      "title": "twitter video #1410624005669169154",
+      "error": null,
+      "duration_ms": 34513
+    },
+    {
+      "url": "https://twitter.com/jack/status/20",
+      "label": "restricted",
+      "status": "PASS",
+      "http_status": 200,
+      "title": "jack - just setting up my twttr",
+      "error": null,
+      "duration_ms": 22329
+    },
+    {
+      "url": "https://twitter.com/naval/status/1002103360646823936",
+      "label": "restricted",
+      "status": "PASS",
+      "http_status": 200,
+      "title": "Naval - How to Get Rich (without getting lucky):",
+      "error": null,
+      "duration_ms": 12543
+    },
+    {
+      "url": "https://twitter.com/nasa",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Twitter may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 61426
+    },
+    {
+      "url": "https://twitter.com/hashtag/AI",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Twitter may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 79591
+    },
+    {
+      "url": "https://www.pinterest.com/pin/99360735500167749/",
+      "label": "restricted",
+      "status": "PASS",
+      "http_status": 200,
+      "title": "Pinterest video #99360735500167749",
+      "error": null,
+      "duration_ms": 20189
+    },
+    {
+      "url": "https://www.pinterest.com/nasa/space/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Pinterest may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 64398
+    },
+    {
+      "url": "https://www.pinterest.com/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": 403,
+      "title": null,
+      "error": "{\"detail\":\"Pinterest may require cookies for this content. Provide COOKIES_FILE in .env.\"}",
+      "duration_ms": 64931
+    },
+    {
+      "url": "https://www.snapchat.com/spotlight/WxPZ7VUrW3n",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180776
+    },
+    {
+      "url": "https://www.snapchat.com/add/team.snapchat",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180769
+    },
+    {
+      "url": "https://www.linkedin.com/posts/linkedin_what-are-your-goals-activity-7010844765029011456-XYZ/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180768
+    },
+    {
+      "url": "https://www.linkedin.com/posts/ericschmidt_ai-and-society-activity-7048730381558749184-YsJK/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180803
+    },
+    {
+      "url": "https://www.linkedin.com/company/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180789
+    },
+    {
+      "url": "https://www.linkedin.com/pulse/future-work-jeff-weiner/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=90)",
+      "duration_ms": 180765
+    },
+    {
+      "url": "https://www.reddit.com/r/videos/comments/1c7dqk/sample_video_post/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90794
+    },
+    {
+      "url": "https://www.reddit.com/r/pics/comments/3g1jfi/cute_cat_picture/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90786
+    },
+    {
+      "url": "https://www.reddit.com/r/AskReddit/comments/1ajk3f/what_is_your_favorite_book/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90776
+    },
+    {
+      "url": "https://www.reddit.com/r/space/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90776
+    },
+    {
+      "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90762
+    },
+    {
+      "url": "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8004): Read timed out. (read timeout=45)",
+      "duration_ms": 90764
+    }
+  ]
+}

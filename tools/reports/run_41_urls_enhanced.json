@@ -1,0 +1,418 @@
+{
+  "base": "http://127.0.0.1:8000/api/info",
+  "results": [
+    {
+      "index": 0,
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4169C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7996
+    },
+    {
+      "index": 1,
+      "url": "https://www.youtube.com/shorts/aqz-KE-bpKQ",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.youtube.com%2Fshorts%2Faqz-KE-bpKQ&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416BE0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7981
+    },
+    {
+      "index": 2,
+      "url": "https://www.youtube.com/playlist?list=PLMC9KNkIncKtsacKpgMb0CVqT5pXrWpKf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLMC9KNkIncKtsacKpgMb0CVqT5pXrWpKf&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416F10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7978
+    },
+    {
+      "index": 3,
+      "url": "https://www.youtube.com/@NASA",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.youtube.com%2F%40NASA&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416AD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7997
+    },
+    {
+      "index": 4,
+      "url": "https://www.instagram.com/p/C8QltYbIh2P/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fp%2FC8QltYbIh2P%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416CF0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7978
+    },
+    {
+      "index": 5,
+      "url": "https://www.instagram.com/p/CWg8ZBxD5cf/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fp%2FCWg8ZBxD5cf%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416030>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7988
+    },
+    {
+      "index": 6,
+      "url": "https://www.instagram.com/p/CFkFyr0HT5G/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fp%2FCFkFyr0HT5G%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD417460>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8004
+    },
+    {
+      "index": 7,
+      "url": "https://www.instagram.com/reel/C9cP8s1yR3R/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Freel%2FC9cP8s1yR3R%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4156A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7996
+    },
+    {
+      "index": 8,
+      "url": "https://www.instagram.com/tv/CFnU1OcJk5L/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Ftv%2FCFnU1OcJk5L%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD417130>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7997
+    },
+    {
+      "index": 9,
+      "url": "https://www.instagram.com/stories/highlights/17895511311129510/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fstories%2Fhighlights%2F17895511311129510%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2580>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7997
+    },
+    {
+      "index": 10,
+      "url": "https://www.instagram.com/p/CHuJ3FwJp4V/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fp%2FCHuJ3FwJp4V%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1D00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7981
+    },
+    {
+      "index": 11,
+      "url": "https://www.instagram.com/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fnasa%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7979
+    },
+    {
+      "index": 12,
+      "url": "https://www.instagram.com/explore/locations/213385402/new-york-new-york/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fexplore%2Flocations%2F213385402%2Fnew-york-new-york%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C07C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8023
+    },
+    {
+      "index": 13,
+      "url": "https://www.instagram.com/explore/tags/sunset/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.instagram.com%2Fexplore%2Ftags%2Fsunset%2F&instant=1&multi=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416E00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8034
+    },
+    {
+      "index": 14,
+      "url": "https://www.facebook.com/watch/?v=10153231379946729",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D10153231379946729&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416F10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8001
+    },
+    {
+      "index": 15,
+      "url": "https://www.facebook.com/20531316728/posts/10154009990506729/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.facebook.com%2F20531316728%2Fposts%2F10154009990506729%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD416AD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8001
+    },
+    {
+      "index": 16,
+      "url": "https://www.facebook.com/media/set/?set=a.10100480647661891&type=3",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.facebook.com%2Fmedia%2Fset%2F%3Fset%3Da.10100480647661891%26type%3D3&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1F20>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8012
+    },
+    {
+      "index": 17,
+      "url": "https://www.facebook.com/nasa",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.facebook.com%2Fnasa&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2250>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 8003
+    },
+    {
+      "index": 18,
+      "url": "https://www.tiktok.com/@scout2015/video/6718335390845095173",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.tiktok.com%2F%40scout2015%2Fvideo%2F6718335390845095173&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1590>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7962
+    },
+    {
+      "index": 19,
+      "url": "https://www.tiktok.com/@charlidamelio",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.tiktok.com%2F%40charlidamelio&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1F20>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7960
+    },
+    {
+      "index": 20,
+      "url": "https://www.tiktok.com/tag/fyp",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.tiktok.com%2Ftag%2Ffyp&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C05A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7981
+    },
+    {
+      "index": 21,
+      "url": "https://twitter.com/nasa/status/1410624005669169154",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Ftwitter.com%2Fnasa%2Fstatus%2F1410624005669169154&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2250>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7976
+    },
+    {
+      "index": 22,
+      "url": "https://twitter.com/jack/status/20",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Ftwitter.com%2Fjack%2Fstatus%2F20&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C18C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7973
+    },
+    {
+      "index": 23,
+      "url": "https://twitter.com/naval/status/1002103360646823936",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Ftwitter.com%2Fnaval%2Fstatus%2F1002103360646823936&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1AE0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7970
+    },
+    {
+      "index": 24,
+      "url": "https://twitter.com/nasa",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Ftwitter.com%2Fnasa&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2360>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7986
+    },
+    {
+      "index": 25,
+      "url": "https://twitter.com/hashtag/AI",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Ftwitter.com%2Fhashtag%2FAI&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1590>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7985
+    },
+    {
+      "index": 26,
+      "url": "https://www.pinterest.com/pin/99360735500167749/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F99360735500167749%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C0490>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7975
+    },
+    {
+      "index": 27,
+      "url": "https://www.pinterest.com/nasa/space/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.pinterest.com%2Fnasa%2Fspace%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7976
+    },
+    {
+      "index": 28,
+      "url": "https://www.pinterest.com/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.pinterest.com%2Fnasa%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1F20>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7970
+    },
+    {
+      "index": 29,
+      "url": "https://www.snapchat.com/spotlight/WxPZ7VUrW3n",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.snapchat.com%2Fspotlight%2FWxPZ7VUrW3n&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2580>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7967
+    },
+    {
+      "index": 30,
+      "url": "https://www.snapchat.com/add/team.snapchat",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.snapchat.com%2Fadd%2Fteam.snapchat&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2030>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7980
+    },
+    {
+      "index": 31,
+      "url": "https://www.linkedin.com/posts/linkedin_what-are-your-goals-activity-7010844765029011456-XYZ/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.linkedin.com%2Fposts%2Flinkedin_what-are-your-goals-activity-7010844765029011456-XYZ%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1E10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7977
+    },
+    {
+      "index": 32,
+      "url": "https://www.linkedin.com/posts/ericschmidt_ai-and-society-activity-7048730381558749184-YsJK/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.linkedin.com%2Fposts%2Fericschmidt_ai-and-society-activity-7048730381558749184-YsJK%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C17B0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7960
+    },
+    {
+      "index": 33,
+      "url": "https://www.linkedin.com/company/nasa/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fnasa%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1BF0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7959
+    },
+    {
+      "index": 34,
+      "url": "https://www.linkedin.com/pulse/future-work-jeff-weiner/",
+      "label": "restricted",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.linkedin.com%2Fpulse%2Ffuture-work-jeff-weiner%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2470>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7959
+    },
+    {
+      "index": 35,
+      "url": "https://www.reddit.com/r/videos/comments/1c7dqk/sample_video_post/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fvideos%2Fcomments%2F1c7dqk%2Fsample_video_post%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2250>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7957
+    },
+    {
+      "index": 36,
+      "url": "https://www.reddit.com/r/pics/comments/3g1jfi/cute_cat_picture/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fpics%2Fcomments%2F3g1jfi%2Fcute_cat_picture%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C1590>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7994
+    },
+    {
+      "index": 37,
+      "url": "https://www.reddit.com/r/AskReddit/comments/1ajk3f/what_is_your_favorite_book/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.reddit.com%2Fr%2FAskReddit%2Fcomments%2F1ajk3f%2Fwhat_is_your_favorite_book%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C0050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7990
+    },
+    {
+      "index": 38,
+      "url": "https://www.reddit.com/r/space/",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fspace%2F&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C0380>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7990
+    },
+    {
+      "index": 39,
+      "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.w3.org%2FWAI%2FER%2Ftests%2Fxhtml%2Ftestfiles%2Fresources%2Fpdf%2Fdummy.pdf&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C2360>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7990
+    },
+    {
+      "index": 40,
+      "url": "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+      "label": "public",
+      "status": "FAIL",
+      "http_status": null,
+      "title": null,
+      "error": "retryable error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /api/info?url=https%3A%2F%2Fwww.adobe.com%2Fsupport%2Fproducts%2Fenterprise%2Fknowledgecenter%2Fmedia%2Fc4611_sample_explain.pdf&instant=1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000137AD4C16A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "duration_ms": 7990
+    }
+  ],
+  "pass": 0,
+  "fail": 41,
+  "generated_at": 1757225352
+}

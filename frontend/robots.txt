@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Optional crawl budget control
+# Crawl-delay is ignored by Google but respected by Bing/Yandex
+# Crawl-delay: 2
+
+Sitemap: https://medidown.com/sitemap.xml

@@ -1,0 +1,19 @@
+{
+  "name": "downloader",
+  "version": "1.0.0",
+  "description": "A powerful, fast, and user-friendly media downloader supporting multiple platforms, with a unified API, quality selection, and background task processing for downloads.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
+  },
+  "dependencies": {
+    "sharp": "^0.34.3"
+  }
+}

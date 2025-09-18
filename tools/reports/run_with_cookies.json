@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "base": "http://127.0.0.1:8004",
+    "generated_at": "2025-09-06T07:54:34.720688Z",
+    "scenario": "with_cookies",
+    "groups": [
+      "simple",
+      "restricted"
+    ]
+  },
+  "results": [
+    {
+      "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "status": "PASS",
+      "note": "206 application/pdf; qs=0.001",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "simple"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "simple"
+    },
+    {
+      "url": "https://www.youtube.com/shorts/aqz-KE-bpKQ",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "simple"
+    },
+    {
+      "url": "https://www.tiktok.com/@scout2015/video/6718335390845095173",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.instagram.com/p/C8QltYbIh2P/",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.facebook.com/watch/?v=10153231379946729",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://twitter.com/elonmusk/status/1744274200694730816",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.reddit.com/r/funny/comments/14pyn5f/cat_vibing/",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/microsoft_ai-copilot-activity-7097816389324533760/",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.youtube.com/playlist?list=PLMC9KNkIncKtsacKpgMb0CVqT5pXrWpKf",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://in.pinterest.com/pin/993607355001677491/",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    },
+    {
+      "url": "https://www.snapchat.com/spotlight/1-1585832607719296",
+      "status": "FAIL",
+      "note": "API error: All connection attempts failed",
+      "quality": null,
+      "direct_url_present": false,
+      "group": "restricted"
+    }
+  ],
+  "summary": {
+    "simple": {
+      "PASS": 1,
+      "FAIL": 2,
+      "SKIP": 0
+    },
+    "restricted": {
+      "PASS": 0,
+      "FAIL": 9,
+      "SKIP": 0
+    },
+    "total": {
+      "PASS": 1,
+      "FAIL": 11,
+      "SKIP": 0
+    }
+  }
+}

@@ -12,6 +12,12 @@ venv/
 # Local data
 logs/
 downloads/
+# Keep platform subdirs but ignore contents; allow .gitkeep
+!downloads/
+!downloads/**/
+**/downloads/*
+**/downloads/**
+!**/downloads/.gitkeep
 .env
 *.env
 

@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS for the Universal Media Downloader */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Platform button styles */
+.platform-button img,
+#input-icon-container img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.platform-button.active {
+  background-color: var(--platform-color);
+  border-color: var(--platform-color);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.2);
+}
+
+.platform-button.active:hover {
+  filter: brightness(1.1);
+}
+
+.platform-button.active[data-key="snapchat"] {
+  color: black;
+}
+
+.platform-button.active[data-key="twitter"] {
+  color: white;
+}
+
+.platform-button.active[data-key="tiktok"] {
+  color: black;
+}
+
+/* Submit and download buttons */
+.submit-button {
+  background-color: var(--platform-color);
+}
+
+.focus-ring:focus {
+  --tw-ring-color: var(--platform-color);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.download-button {
+  background-color: var(--platform-color);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+  text-decoration: none !important;
+}
+
+.download-button:active {
+  transform: scale(0.98);
+}
+
+.download-button:visited {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.download-button[data-platform="snapchat"] {
+  color: black;
+}
+
+.download-button[data-platform="twitter"] {
+  color: white;
+}
+
+.download-button[data-platform="tiktok"] {
+  color: black;
+}
+
+/* Processing modal */
+#processing-modal {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* History items */
+.history-item {
+  transition: all 0.2s ease;
+}
+
+.history-item:hover {
+  transform: translateX(5px);
+}
+
+/* Modern Tab Styles */
+.tab-button {
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.tab-button:hover:not(.active) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Quality Card Hover Effects */
+.quality-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.quality-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.dark .quality-card {
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.dark .quality-card:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+}

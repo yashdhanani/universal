@@ -1,0 +1,51 @@
+{% set ap = asset_prefix %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MediDown — Downloader{% endblock %}</title>
+  {% if adsense_enabled and adsense_client %}
+  <meta name="google-adsense-account" content="{{ adsense_client }}">
+  {% endif %}
+  <link rel="icon" type="image/svg+xml" href="{{ ap }}/og-default.svg">
+  <link href="{{ ap }}/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="{{ ap }}/universal-style.css" rel="stylesheet">
+  {% block head %}{% endblock %}
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+  <div class="min-h-screen flex flex-col">
+    <header class="w-full border-b border-gray-200 dark:border-gray-800">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-lg font-semibold">
+          <img src="{{ ap }}/og-default.svg" alt="Logo" class="w-6 h-6"/>
+          <span>MediDown</span>
+        </a>
+        <nav class="flex items-center gap-4 text-sm">
+          <a href="/youtube-downloader" class="hover:text-red-500">YouTube</a>
+          <a href="/instagram-downloader" class="hover:text-pink-500">Instagram</a>
+          <a href="/privacy" class="hover:text-gray-500">Privacy</a>
+          <a href="/terms" class="hover:text-gray-500">Terms</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="w-full border-t border-gray-200 dark:border-gray-800">
+      <div class="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p>© {{ now().year if now else '' }} MediDown — Always respect copyrights and platform TOS.</p>
+      </div>
+    </footer>
+  </div>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

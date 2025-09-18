@@ -9,6 +9,7 @@ import sys
 import subprocess
 import threading
 import time
+import argparse
 from datetime import datetime
 
 def print_banner():
@@ -120,24 +121,27 @@ def setup_environment():
     
     return True
 
-def test_basic_functionality():
-    """Test basic YouTube functionality"""
+def test_basic_functionality(test_url: str | None = None):
+    """Test basic YouTube functionality (fast, extraction-only).
+    Uses a short official yt-dlp test clip by default.
+    """
     print("\n🧪 Testing basic functionality...")
     
     try:
         import yt_dlp
         
-        # Quick test with a simple extraction
-        test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        # Prefer a tiny test clip to minimize network time
+        test_url = test_url or "https://www.youtube.com/watch?v=BaW_jenozKc"  # yt-dlp test video (~9s)
         
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
-            'skip_download': True,
+            'skip_download': True,  # extraction only
             'socket_timeout': 10,
+            'retries': 1,
             'extractor_args': {
                 'youtube': {
-                    'player_client': 'android',
+                    'player_client': 'android',  # single client for speed
                 }
             }
         }
@@ -240,18 +244,44 @@ def start_application():
     return True
 
 def main():
-    """Main startup function"""
+    """Main startup function with fast dev options"""
     print_banner()
-    
-    # Run all setup steps
-    steps = [
-        ("Installing dependencies", check_and_install_dependencies),
-        ("Updating yt-dlp", update_ytdlp),
-        ("Setting up environment", setup_environment),
-        ("Testing functionality", test_basic_functionality),
-        ("Cleaning up files", cleanup_old_files),
-    ]
-    
+
+    # Parse CLI and env flags
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--fast", action="store_true", help="Skip yt-dlp update and tests for faster startup")
+    parser.add_argument("--skip-update", action="store_true", help="Skip yt-dlp update step")
+    parser.add_argument("--skip-tests", action="store_true", help="Skip functionality tests")
+    parser.add_argument("--skip-deps", action="store_true", help="Skip dependency checks/installs")
+    args, _ = parser.parse_known_args()
+
+    # Enable fast mode automatically in development
+    fast = (
+        args.fast
+        or os.environ.get("FAST_DEV", "0") == "1"
+        or os.environ.get("FLASK_ENV", "").lower() == "development"
+    )
+
+    skip_update = fast or args.skip_update or os.environ.get("SKIP_UPDATE", "0") == "1"
+    skip_tests = fast or args.skip_tests or os.environ.get("SKIP_TESTS", "0") == "1"
+    skip_deps = args.skip_deps or os.environ.get("SKIP_DEPS", "0") == "1"
+
+    if fast:
+        print("⚡ Fast dev mode enabled: skipping yt-dlp update and tests. Use --skip-deps to also skip dependency check.")
+
+    # Build steps conditionally
+    steps = []
+    if not skip_deps:
+        steps.append(("Installing dependencies", check_and_install_dependencies))
+    if not skip_update:
+        steps.append(("Updating yt-dlp", update_ytdlp))
+    steps.append(("Setting up environment", setup_environment))
+    if not skip_tests:
+        # Allow overriding test URL via env or CLI
+        test_url = os.environ.get("DEV_TEST_URL")
+        steps.append(("Testing functionality", lambda: test_basic_functionality(test_url)))
+    steps.append(("Cleaning up files", cleanup_old_files))
+
     for step_name, step_func in steps:
         print(f"🔄 {step_name}...")
         if not step_func():
@@ -259,10 +289,10 @@ def main():
             print("🔧 Run 'python troubleshoot.py' for detailed diagnostics")
             return False
         print(f"✅ {step_name} completed")
-    
-    print("\n🎉 All setup steps completed successfully!")
+
+    print("\n🎉 Setup steps completed!")
     print("🚀 Starting application...")
-    
+
     # Start the application
     return start_application()
 

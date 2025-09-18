@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "description": "Unified API validation across 41 URLs — simple vs restricted, with and without cookies",
+    "base": "http://127.0.0.1:8004",
+    "generated_at": "${NOW}",
+    "groups": ["simple", "restricted"],
+    "scenarios": ["with_cookies", "without_cookies"]
+  },
+  "groups": {
+    "simple": {
+      "urls": [
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "https://www.youtube.com/shorts/aqz-KE-bpKQ",
+        "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        "https://www.youtube.com/watch?v=9bZkp7q19f0",
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        "https://www.w3.org/TR/PNG/iso_8859-1.txt",
+        "https://file-examples.com/storage/fe23a0cbf1b5d8f2c/sample-video-1280x720-1mb.mp4",
+        "https://file-examples.com/storage/fe23a0cbf1b5d8f2c/sample-mp4-file.mp4",
+        "https://file-examples.com/storage/fe23a0cbf1b5d8f2c/sample-webm-file.webm",
+        "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+        "https://sample-videos.com/img/Sample-jpg-image-500kb.jpg"
+      ]
+    },
+    "restricted": {
+      "urls": [
+        "https://www.instagram.com/p/C8QltYbIh2P/",
+        "https://www.facebook.com/watch/?v=10153231379946729",
+        "https://www.tiktok.com/@scout2015/video/6718335390845095173",
+        "https://twitter.com/elonmusk/status/1744274200694730816",
+        "https://www.linkedin.com/posts/microsoft_ai-copilot-activity-7097816389324533760/",
+        "https://www.reddit.com/r/funny/comments/14pyn5f/cat_vibing/",
+        "https://in.pinterest.com/pin/993607355001677491/",
+        "https://www.snapchat.com/spotlight/1-1585832607719296",
+        "https://www.youtube.com/playlist?list=PLMC9KNkIncKtsacKpgMb0CVqT5pXrWpKf",
+        "https://www.youtube.com/playlist?list=PLrEnWoR732-DBRmywroaQmL9sQ1Z7u5Fh",
+        "https://www.youtube.com/@NASA"
+      ]
+    }
+  },
+  "scenarios": {
+    "with_cookies": {
+      "expected": {
+        "simple": { "PASS": 11, "FAIL": 0, "SKIP": 0 },
+        "restricted": { "PASS": 30, "FAIL": 0, "SKIP": 0 }
+      },
+      "notes": "All restricted platforms have valid Netscape cookies; expect fast responses and YouTube playlists to use flat fallback."
+    },
+    "without_cookies": {
+      "expected": {
+        "simple": { "PASS": 11, "FAIL": 0, "SKIP": 0 },
+        "restricted": { "PASS": 0, "FAIL": 0, "SKIP": 30 }
+      },
+      "notes": "Restricted platforms return fast SKIP=needs_cookies; no 45s timeouts. YouTube playlists still PASS via flat fallback."
+    }
+  }
+}

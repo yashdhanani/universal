@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instant Downloader (Frontend Only)</title>
+  <style>
+    :root {
+      --bg: #0b1020; --card: #111831; --text: #e9edf6; --muted: #b6c2e0;
+      --primary: #4f46e5; --primary-2: #6366f1; --danger: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 860px; margin: 40px auto; padding: 0 16px; }
+    .card { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+    h1 { font-size: 22px; margin: 0 0 12px; letter-spacing: 0.2px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr; gap: 12px; }
+    label { display: block; color: var(--muted); font-size: 12px; margin: 6px 0; }
+    input, select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: #0f1530; color: var(--text); outline: none; }
+    input::placeholder { color: #7f8bb3; }
+    button { padding: 10px 14px; border-radius: 10px; border: 0; color: white; background: var(--primary); cursor: pointer; transition: background .15s, opacity .15s; }
+    button:hover { background: var(--primary-2); }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .hint { font-size: 12px; color: #9fb0ff; }
+    .danger { color: var(--danger); }
+    .footer { margin-top: 18px; color: var(--muted); font-size: 12px; text-align: center; }
+    .pill { display:inline-block; padding: 2px 8px; font-size: 12px; border-radius: 999px; background: rgba(99,102,241,.15); color:#c7d2fe; }
+    .status { margin-top: 10px; min-height: 18px; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="/static/logo-medidown-clean.svg" alt="medidown.com" style="height:32px; width:auto; display:block;" onerror="this.src='/static/logo-medidown-dark.svg'"/>
+        <span class="pill" style="font-size:11px;">Beta</span>
+      </div>
+      <a href="/universal_tailwind" style="background:#22c55e;color:white;text-decoration:none;padding:8px 10px;border-radius:8px;">← Back to Universal</a>
+    </div>
+    <div class="card">
+      <h1>Instant Downloader <span class="pill">Frontend Only</span></h1>
+      <p class="muted" style="margin:6px 0 16px;">No server-side downloads or merges. Once your backend API is live, set API Base below to enable instant redirects.</p>
+
+      <div class="row">
+        <div>
+          <label>Backend API Base (set when backend is live)</label>
+          <input id="apiBase" placeholder="https://your-backend.onrender.com" />
+          <div class="hint">Example: https://my-app.onrender.com (no trailing slash)</div>
+        </div>
+        <div>
+          <label>API Key (optional)</label>
+          <input id="apiKey" placeholder="Leave empty if not required" />
+          <div class="hint">Not required now. Add later only if your backend enforces it.</div>
+        </div>
+      </div>
+
+      <div class="row-3" style="margin-top:14px;">
+        <div>
+          <label>Media URL</label>
+          <input id="url" placeholder="Paste the post/video URL..." />
+        </div>
+        <div>
+          <label>Platform</label>
+          <select id="platform">
+            <option value="youtube" selected>YouTube</option>
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+            <option value="twitter">Twitter/X</option>
+            <option value="reddit">Reddit</option>
+            <option value="pinterest">Pinterest</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="snapchat">Snapchat</option>
+          </select>
+        </div>
+        <div>
+          <label>Format</label>
+          <select id="format">
+            <option value="best" selected>Best (instant if available)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; display:flex; gap:10px; flex-wrap: wrap;">
+        <button id="btnInstant" disabled>Instant Download</button>
+        <button id="btnServer" disabled style="background:#10b981;">Server Download (with progress)</button>
+        <button id="btnGetVideo" disabled style="background:#3b82f6;">Get Video (API)</button>
+        <button id="btnGetPhoto" disabled style="background:#f59e0b;">Get Photo (API)</button>
+      </div>
+
+      <div id="status" class="status"></div>
+      <div id="progress" class="status" style="margin-top:8px; font-weight:600;"></div>
+      <div id="preview" class="status" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="footer">This page does not perform any server-side work. It only redirects to direct CDN URLs via your API once configured. <a href="/universal_tailwind" style="margin-left:8px;color:#c7d2fe;">Back to Universal</a></div>
+  </div>
+
+  <script src="/static/js/platform_utils.js"></script>
+  <script>
+    const els = (id) => document.getElementById(id);
+    const setStatus = (msg, isError=false) => {
+      const el = els('status');
+      el.textContent = msg || '';
+      el.className = 'status' + (isError ? ' danger' : '');
+    };
+
+    function normalizedBase(base) {
+      if (!base) return '';
+      return base.replace(/\/+$/, '');
+    }
+
+    function headers() {
+      const key = (els('apiKey').value || '').trim();
+      const h = { 'Accept': 'application/json' };
+      if (key) h['X-API-Key'] = key;
+      return h;
+    }
+
+    async function checkBackend(base) {
+      try {
+        const r = await fetch(base + '/health', { headers: headers() });
+        return r.ok;
+      } catch (_) { return false; }
+    }
+
+    async function evaluateEnablement() {
+      const base = normalizedBase(els('apiBase').value.trim());
+      const ok = base && await checkBackend(base);
+      els('btnInstant').disabled = !ok;
+      els('btnServer').disabled = !ok;
+      els('btnGetVideo').disabled = !ok;
+      els('btnGetPhoto').disabled = !ok;
+      setStatus(ok ? 'Backend detected. Instant download is enabled.' : 'Enter a valid API base and ensure /health returns OK.');
+      if (ok) localStorage.setItem('instant_api_base', base);
+      const key = (els('apiKey').value || '').trim();
+      localStorage.setItem('instant_api_key', key);
+    }
+
+    // --- Sorting mode helpers ---
+    function getMode() {
+      return localStorage.getItem('instant_sort_mode') || 'quality'; // 'quality' | 'data_saver'
+    }
+
+    function setMode(mode) {
+      localStorage.setItem('instant_sort_mode', mode);
+      updateModeUi();
+    }
+
+    function toggleMode() {
+      setMode(getMode() === 'quality' ? 'data_saver' : 'quality');
+    }
+
+    function updateModeUi() {
+      const btn = els('modeToggle');
+      if (!btn) return;
+      const mode = getMode();
+      btn.textContent = mode === 'quality' ? '⚡ Best Quality' : '📉 Data Saver';
+      btn.style.background = mode === 'quality' ? '#4f46e5' : '#0ea5e9';
+    }
+
+    // --- Normalization + sorting ---
+    function normalizeFormat(f, durationSec) {
+      const h   = Number(f.height || 0);
+      const fps = Number(f.fps || 0);
+      const sizeRaw = Number(f.filesize || f.filesize_approx || 0); // bytes
+      const tbr = Number(f.tbr || f.bitrate || 0);                  // kbps
+      // Estimate size from tbr if no filesize and we have duration
+      const sizeEst = sizeRaw || (durationSec && tbr ? (tbr * 1000 / 8) * durationSec : 0); // bytes
+      return { ...f, _h: h, _fps: fps, _size: sizeEst, _tbr: tbr };
+    }
+
+    function sortQualityFirst(list) {
+      // height ↓, fps ↓, size ↓
+      return list.sort((a, b) =>
+        (b._h - a._h) || (b._fps - a._fps) || (b._size - a._size)
+      );
+    }
+
+    function sortDataSaver(list) {
+      // size ↑, height ↑, fps ↑
+      return list.sort((a, b) =>
+        (a._size - b._size) || (a._h - b._h) || (a._fps - b._fps)
+      );
+    }
+
+    function pickBestMp4FromInfo(info, mode = 'quality') {
+      const list = (info && (info.mp4 || [])) || [];
+      if (!list.length) return null;
+      const duration = Number(info.duration || 0);
+      const normalized = list.map(f => normalizeFormat(f, duration));
+      const sorted = mode === 'data_saver' ? sortDataSaver(normalized) : sortQualityFirst(normalized);
+      return sorted[0];
+    }
+
+    async function startInstant() {
+      const base = normalizedBase(els('apiBase').value.trim());
+      const platform = els('platform').value;
+      const url = (els('url').value || '').trim();
+      const formatId = els('format').value || 'best';
+
+      if (!base) return setStatus('Set API Base first.', true);
+      if (!url) return setStatus('Paste a media URL.', true);
+
+      setStatus('Preparing instant redirect...');
+
+      try {
+        if (platform === 'youtube') {
+          const parsed = PlatformUtils.parseYouTubeUrl(url);
+          if (['video','shorts','short','embed'].includes(parsed.type) && parsed.videoId) {
+            const canonical = PlatformUtils.canonicalizePlatformUrl('youtube', url);
+            const redirectUrl = `${base}/api/v2/youtube/instant?url=${encodeURIComponent(canonical)}&format_id=${encodeURIComponent(formatId)}&filename=${encodeURIComponent((document.title||'video')+'.mp4')}`;
+            window.location.href = redirectUrl;
+            return;
+          } else if (parsed.type === 'playlist' && parsed.playlistId) {
+            setStatus('Playlists are not supported for instant redirect. Open a specific video link instead.', true);
+            return;
+          }
+          // Fallback to raw URL if parsing failed
+          const redirectUrl = `${base}/api/v2/youtube/instant?url=${encodeURIComponent(url)}&format_id=${encodeURIComponent(formatId)}&filename=${encodeURIComponent((document.title||'video')+'.mp4')}`;
+          window.location.href = redirectUrl;
+          return;
+        }
+
+        const infoUrl = `${base}/api/v2/${encodeURIComponent(platform)}/info?url=${encodeURIComponent(url)}`;
+        const res = await fetch(infoUrl, { headers: headers() });
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(`Info failed: ${res.status} ${t}`);
+        }
+        const data = await res.json();
+        const best = pickBestMp4FromInfo(data);
+
+        if (best && best.url) {
+          window.location.href = best.url;
+          return;
+        }
+        setStatus('No direct MP4 found. Try a different post.', true);
+      } catch (e) {
+        setStatus('Error: ' + (e?.message || e), true);
+      }
+    }
+
+    // Persist config between visits
+    (function init() {
+      const savedBase = localStorage.getItem('instant_api_base');
+      const savedKey = localStorage.getItem('instant_api_key');
+      if (savedBase) els('apiBase').value = savedBase;
+      if (savedKey) els('apiKey').value = savedKey;
+      // Re-evaluate enablement on load
+      if (savedBase) evaluateEnablement();
+    })();
+
+    els('apiBase').addEventListener('input', () => evaluateEnablement());
+    els('apiKey').addEventListener('input', () => evaluateEnablement());
+    async function startServerDownload() {
+      const base = normalizedBase(els('apiBase').value.trim());
+      const platform = els('platform').value;
+      let url = (els('url').value || '').trim();
+      const formatId = els('format').value || 'best';
+      const progressEl = els('progress');
+      if (!base) return setStatus('Set API Base first.', true);
+      if (!url) return setStatus('Paste a media URL.', true);
+
+      // Canonicalize YouTube
+      try { url = PlatformUtils.canonicalizePlatformUrl(platform, url); } catch {}
+
+      setStatus('Starting server download...');
+      progressEl.textContent = '📥 Downloading... 0%';
+
+      try {
+        const resp = await fetch(`${base}/api/v2/${encodeURIComponent(platform)}/download`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', ...headers() },
+          body: JSON.stringify({ url, format_id: String(formatId) })
+        });
+        if (!resp.ok) {
+          const t = await resp.text();
+          throw new Error(`Start failed: ${resp.status} ${t}`);
+        }
+        const data = await resp.json();
+        const taskId = data.task_id;
+        // Poll every second
+        while (true) {
+          const pr = await fetch(`${base}/api/v2/task/${encodeURIComponent(taskId)}`, { headers: headers() });
+          if (!pr.ok) throw new Error(`Progress failed: ${pr.status}`);
+          const p = await pr.json();
+          const state = String(p.state || '').toUpperCase();
+          const status = p.detail || p.status || '';
+          let percent = typeof p.percent === 'number' ? p.percent : 0;
+          if (!percent && typeof status === 'string') {
+            const m = status.match(/(\d+(?:\.\d+)?)%/);
+            if (m) percent = parseFloat(m[1]);
+          }
+          const eta = typeof p.eta === 'number' ? p.eta : null;
+          const etaTxt = eta != null ? ` • ETA ${Math.floor(eta/60)}:${String(Math.floor(eta%60)).padStart(2,'0')}` : '';
+          progressEl.textContent = `📥 ${status || 'Downloading...'} ${Math.round(percent)}%${etaTxt}`;
+
+          if (state === 'SUCCESS') {
+            const path = p.result && p.result.path;
+            const filename = path ? String(path).split(/[\\\/]/).pop() : null;
+            setStatus('✅ Download completed.');
+            progressEl.textContent = '100%';
+            if (filename) window.location.href = `/download/${encodeURIComponent(filename)}`;
+            break;
+          }
+          if (state === 'FAILURE') {
+            throw new Error(p.detail || 'Download failed');
+          }
+          await new Promise(r => setTimeout(r, 1000));
+        }
+      } catch (e) {
+        setStatus('Error: ' + (e?.message || e), true);
+      }
+    }
+
+    els('btnInstant').addEventListener('click', startInstant);
+    els('btnServer').addEventListener('click', startServerDownload);
+
+    async function getPhotoApi() {
+      const base = normalizedBase(els('apiBase').value.trim());
+      const platform = els('platform').value;
+      const url = (els('url').value || '').trim();
+      const previewEl = els('preview');
+      if (!base) return setStatus('Set API Base first.', true);
+      if (!url) return setStatus('Paste a media URL.', true);
+
+      setStatus('Resolving direct photo URL...');
+      previewEl.textContent = '';
+
+      try {
+        // Prefer new v2 endpoint if present
+        const apiUrl = `${base}/get-photo?url=${encodeURIComponent(url)}`;
+        const res = await fetch(apiUrl, { headers: headers() });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data || data.success === false) {
+          const msg = (data && (data.message || data.error)) || `${res.status}`;
+          throw new Error(`Failed: ${msg}`);
+        }
+        const direct = data.photo_url || data.image_url || data.url;
+        if (!direct) throw new Error('No direct photo URL returned');
+
+        setStatus(`Resolved photo via ${data.platform || platform}.`);
+        previewEl.innerHTML = `
+          <div class="muted">Direct Photo URL resolved:</div>
+          <div style="overflow-wrap:anywhere; margin:4px 0 10px;">${direct}</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="${direct}" target="_blank" rel="noopener" style="background:#4f46e5;color:white;text-decoration:none;padding:8px 10px;border-radius:8px;">Open</a>
+            <a href="${direct}" download style="background:#10b981;color:white;text-decoration:none;padding:8px 10px;border-radius:8px;">Download</a>
+          </div>
+          <div style="margin-top:10px;">
+            <img src="${direct}" alt="preview" style="max-width:100%; height:auto; border-radius:8px;"/>
+          </div>`;
+      } catch (e) {
+        setStatus('Error: ' + (e?.message || e), true);
+      }
+    }
+
+    els('btnGetPhoto').addEventListener('click', getPhotoApi);
+
+    async function getVideoApi() {
+      const base = normalizedBase(els('apiBase').value.trim());
+      const platform = els('platform').value; // not strictly required by endpoint, kept for clarity
+      const url = (els('url').value || '').trim();
+      const formatId = els('format').value || 'best';
+      const previewEl = els('preview');
+      if (!base) return setStatus('Set API Base first.', true);
+      if (!url) return setStatus('Paste a media URL.', true);
+
+      setStatus('Resolving direct video URL...');
+      previewEl.textContent = '';
+
+      try {
+        const apiUrl = `${base}/get-video?url=${encodeURIComponent(url)}&format_id=${encodeURIComponent(formatId)}`;
+        const res = await fetch(apiUrl, { headers: headers() });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data || data.success === false) {
+          const msg = (data && (data.message || data.error)) || `${res.status}`;
+          throw new Error(`Failed: ${msg}`);
+        }
+        const direct = data.video_url;
+        if (!direct) throw new Error('No direct URL returned');
+
+        setStatus(`Resolved via ${data.platform || platform}.`);
+        // Build simple preview and download link
+        previewEl.innerHTML = `
+          <div class="muted">Direct URL resolved:</div>
+          <div style="overflow-wrap:anywhere; margin:4px 0 10px;">${direct}</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="${direct}" target="_blank" rel="noopener" style="background:#4f46e5;color:white;text-decoration:none;padding:8px 10px;border-radius:8px;">Open</a>
+            <a href="${direct}" download style="background:#10b981;color:white;text-decoration:none;padding:8px 10px;border-radius:8px;">Download</a>
+          </div>`;
+      } catch (e) {
+        setStatus('Error: ' + (e?.message || e), true);
+      }
+    }
+
+    els('btnGetVideo').addEventListener('click', getVideoApi);
+  </script>
+</body>
+</html>

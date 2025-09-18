@@ -1,0 +1,158 @@
+[debug] Command-line config: ['-v', 'https://www.instagram.com/p/Cw123abcXYZ/']
+[debug] Encodings: locale cp1252, fs utf-8, pref cp1252, out cp1252 (No ANSI), error cp1252 (No ANSI), screen cp1252 (No ANSI)
+[debug] yt-dlp version stable@2025.09.05 from yt-dlp/yt-dlp [50136eeeb] (pip)
+[debug] Python 3.13.2 (CPython AMD64 64bit) - Windows-11-10.0.26100-SP0 (OpenSSL 3.0.15 3 Sep 2024)
+[debug] exe versions: ffmpeg 7.1.1-essentials_build-www.gyan.dev (setts), ffprobe 7.1.1-essentials_build-www.gyan.dev
+[debug] Optional libraries: certifi-2025.08.03, requests-2.32.5, sqlite3-3.45.3, urllib3-2.5.0
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib, requests
+[debug] Plugin directories: none
+[debug] Loaded 1842 extractors
+[Instagram] Extracting URL: https://www.instagram.com/p/Cw123abcXYZ/
+[Instagram] Cw123abcXYZ: Setting up session
+WARNING: [Instagram] Cw123abcXYZ: Instagram API is not granting access
+[Instagram] Cw123abcXYZ: Downloading JSON metadata
+ERROR: [Instagram] Cw123abcXYZ: Instagram sent an empty media response. Check if this post is accessible in your browser without being logged-in. If it is not, then use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Otherwise, if the post is accessible in browser without being logged-in, please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 762, in extract
+    ie_result = self._real_extract(url)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\instagram.py", line 448, in _real_extract
+    raise ExtractorError(
+    ...<3 lines>...
+        f'{bug_reports_message(before=",")}', expected=True)
+
+---------------------- 
+[debug] Command-line config: ['-v', 'https://www.tiktok.com/@scout2015/video/6718335390845095173']
+[debug] Encodings: locale cp1252, fs utf-8, pref cp1252, out cp1252 (No ANSI), error cp1252 (No ANSI), screen cp1252 (No ANSI)
+[debug] yt-dlp version stable@2025.09.05 from yt-dlp/yt-dlp [50136eeeb] (pip)
+[debug] Python 3.13.2 (CPython AMD64 64bit) - Windows-11-10.0.26100-SP0 (OpenSSL 3.0.15 3 Sep 2024)
+[debug] exe versions: ffmpeg 7.1.1-essentials_build-www.gyan.dev (setts), ffprobe 7.1.1-essentials_build-www.gyan.dev
+[debug] Optional libraries: certifi-2025.08.03, requests-2.32.5, sqlite3-3.45.3, urllib3-2.5.0
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib, requests
+[debug] Plugin directories: none
+[debug] Loaded 1842 extractors
+[TikTok] Extracting URL: https://www.tiktok.com/@scout2015/video/6718335390845095173
+[TikTok] 6718335390845095173: Downloading webpage
+ERROR: [TikTok] 6718335390845095173: Unable to download webpage: (<urllib3.connection.HTTPSConnection object at 0x000001F29B40BA10>, 'Connection to www.tiktok.com timed out. (connect timeout=20.0)') (caused by TransportError("(<urllib3.connection.HTTPSConnection object at 0x000001F29B40BA10>, 'Connection to www.tiktok.com timed out. (connect timeout=20.0)')"))
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 762, in extract
+    ie_result = self._real_extract(url)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\tiktok.py", line 901, in _real_extract
+    video_data, status = self._extract_web_data_and_status(url, video_id)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\tiktok.py", line 223, in _extract_web_data_and_status
+    res = self._download_webpage_handle(url, video_id, fatal=fatal, headers={'User-Agent': 'Mozilla/5.0'})
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 973, in _download_webpage_handle
+    urlh = self._request_webpage(url_or_request, video_id, note, errnote, fatal, data=data,
+                                 headers=headers, query=query, expected_status=expected_status,
+                                 impersonate=impersonate, require_impersonation=require_impersonation)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 922, in _request_webpage
+    raise ExtractorError(errmsg, cause=err)
+
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\networking\_requests.py", line 320, in _send
+    requests_res = session.request(
+        method=request.method,
+    ...<6 lines>...
+        stream=True,
+    )
+  File "E:\project\downloader\venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "E:\project\downloader\venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "E:\project\downloader\venv\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "E:\project\downloader\venv\Lib\site-packages\urllib3\connection.py", line 207, in _new_conn
+    raise ConnectTimeoutError(
+    ...<2 lines>...
+    ) from e
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x000001F29B40BA10>, 'Connection to www.tiktok.com timed out. (connect timeout=20.0)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 909, in _request_webpage
+    return self._downloader.urlopen(self._create_request(url_or_request, data, headers, query, extensions))
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\YoutubeDL.py", line 4239, in urlopen
+    return self._request_director.send(req)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\networking\common.py", line 117, in send
+    response = handler.send(request)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\networking\_helper.py", line 194, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\networking\common.py", line 359, in send
+    return self._send(request)
+           ~~~~~~~~~~^^^^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\networking\_requests.py", line 348, in _send
+    raise TransportError(cause=e) from e
+yt_dlp.networking.exceptions.TransportError: (<urllib3.connection.HTTPSConnection object at 0x000001F29B40BA10>, 'Connection to www.tiktok.com timed out. (connect timeout=20.0)')
+
+---------------------- 
+[debug] Command-line config: ['-v', 'https://x.com/Interior/status/463440424141459456']
+[debug] Encodings: locale cp1252, fs utf-8, pref cp1252, out cp1252 (No ANSI), error cp1252 (No ANSI), screen cp1252 (No ANSI)
+[debug] yt-dlp version stable@2025.09.05 from yt-dlp/yt-dlp [50136eeeb] (pip)
+[debug] Python 3.13.2 (CPython AMD64 64bit) - Windows-11-10.0.26100-SP0 (OpenSSL 3.0.15 3 Sep 2024)
+[debug] exe versions: ffmpeg 7.1.1-essentials_build-www.gyan.dev (setts), ffprobe 7.1.1-essentials_build-www.gyan.dev
+[debug] Optional libraries: certifi-2025.08.03, requests-2.32.5, sqlite3-3.45.3, urllib3-2.5.0
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib, requests
+[debug] Plugin directories: none
+[debug] Loaded 1842 extractors
+[twitter] Extracting URL: https://x.com/Interior/status/463440424141459456
+[twitter] 463440424141459456: Downloading guest token
+[twitter] 463440424141459456: Downloading GraphQL JSON
+ERROR: [twitter] 463440424141459456: No video could be found in this tweet
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 762, in extract
+    ie_result = self._real_extract(url)
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\twitter.py", line 1524, in _real_extract
+    self.raise_no_formats('No video could be found in this tweet', expected=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\project\downloader\venv\Lib\site-packages\yt_dlp\extractor\common.py", line 1274, in raise_no_formats
+    raise ExtractorError(msg, expected=expected, video_id=video_id)
+
+---------------------- 

@@ -1,0 +1,29 @@
+# Normalize line endings across platforms
+* text=auto
+
+# Treat common binary assets as binary (no diffs)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.mp4  binary
+*.webm binary
+*.mp3  binary
+*.wav  binary
+*.pdf  binary
+*.zip  binary
+*.7z   binary
+*.exe  binary
+*.dll  binary
+
+# Scripts and text files are text by default
+*.py   text
+*.js   text
+*.css  text
+*.html text
+*.yml  text
+*.yaml text
+*.json text
+*.md   text
+*.bat  text

@@ -1,7 +1,7 @@
 {
-  "name": "YouTube Downloader",
-  "short_name": "YT Downloader",
-  "description": "Fast and easy YouTube video downloader for all devices",
+  "name": "MediDown — Universal Media Downloader",
+  "short_name": "MediDown",
+  "description": "MediDown.com — Download videos from YouTube, Instagram, Facebook, TikTok, Twitter and more. Fast and free.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#667eea",

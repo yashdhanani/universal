@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Instagram Downloader — Reels, Stories, Photos{% endblock %}
+{% block head %}
+<meta name="description" content="Download Instagram Reels, Stories, photos and videos in HD." />
+{% endblock %}
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 py-10">
+  <div class="text-center mb-6">
+    <h1 class="text-3xl md:text-4xl font-bold">Instagram Downloader</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2">Paste an Instagram link</p>
+  </div>
+
+  <div class="bg-gray-50 dark:bg-gray-800 p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+    <form id="ig-form" class="space-y-4">
+      <div class="flex flex-col sm:flex-row items-center gap-3">
+        <input type="text" id="ig-url" placeholder="https://www.instagram.com/reel/..." class="w-full bg-white dark:bg-gray-900/50 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-lg font-semibold text-white bg-pink-500 hover:bg-pink-600 transition">Analyze</button>
+      </div>
+    </form>
+
+    <div id="ig-results" class="mt-4"></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+// Hook to your existing /api/instagram/analyze if present
+</script>
+{% endblock %}
