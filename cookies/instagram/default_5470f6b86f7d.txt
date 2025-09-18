@@ -1,3 +1,0 @@
-# Placeholder cookies.txt (Netscape format)
-# Export your browser cookies for youtube.com using an extension like "Get cookies.txt" and replace this file.
-# Format reference: https://curl.se/docs/http-cookies.html

@@ -12,6 +12,8 @@ venv/
 # Local data
 logs/
 downloads/
+cache/
+cookies/
 # Keep platform subdirs but ignore contents; allow .gitkeep
 !downloads/
 !downloads/**/
@@ -21,9 +23,25 @@ downloads/
 .env
 *.env
 
+# Logs and temp files
+*.log
+*.bak
+*.tmp
+install.log
+errors.log
+batch_test_results.log
+
 # Reports
 auto_check_report.json
+functionality_test_results.json
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Database
+*.db
+*.db-*

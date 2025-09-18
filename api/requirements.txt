@@ -1,9 +1,0 @@
-Flask==3.1.2
-yt-dlp>=2025.8.20
-waitress==3.0.2
-fastapi==0.115.5
-uvicorn==0.30.6
-redis==5.0.7
-httpx==0.27.2
-python-dotenv==0.21.1
-celery>=5.3
